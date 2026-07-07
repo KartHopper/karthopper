@@ -36,7 +36,8 @@
     "noLimit": "No limit",
     "needOrigin": "Pick a position first",
     "dateFrom": "From",
-    "dateTo": "To"
+    "dateTo": "To",
+    "showMore": "Show {count} more"
   },
   "categories": {
     "sprint": "Sprint",

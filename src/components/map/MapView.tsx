@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useTranslations } from "next-intl";
 import { AlertTriangle } from "lucide-react";
 import {
@@ -22,6 +22,8 @@ interface MapViewProps {
   passportMode?: boolean;
   onSelectCircuit(id: number | null): void;
   selectedCircuitId: number | null;
+  /** Circuit à recentrer/zoomer (déclenché par une sélection depuis la liste, pas la carte). */
+  flyToCircuitId?: number | null;
   children?: React.ReactNode;
 }
 
@@ -63,12 +65,23 @@ export function MapView({
   passportMode = false,
   onSelectCircuit,
   selectedCircuitId,
+  flyToCircuitId = null,
   children,
 }: MapViewProps) {
   const t = useTranslations();
   const mapRef = useRef<MapRef>(null);
   const origin = useFiltersStore((state) => state.origin);
   const apiKey = process.env.NEXT_PUBLIC_MAPTILER_API_KEY;
+
+  useEffect(() => {
+    if (flyToCircuitId === null) return;
+    const circuit = circuits.find((item) => item.id === flyToCircuitId);
+    const map = mapRef.current?.getMap();
+    if (circuit && map) {
+      map.easeTo({ center: [circuit.lng, circuit.lat], zoom: 10 });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- ne déclencher que sur un nouveau flyToCircuitId
+  }, [flyToCircuitId]);
 
   const initialViewState = useMemo(
     () =>

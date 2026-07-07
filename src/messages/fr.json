@@ -36,7 +36,8 @@
     "noLimit": "Sans limite",
     "needOrigin": "Choisis d'abord une position",
     "dateFrom": "Du",
-    "dateTo": "Au"
+    "dateTo": "Au",
+    "showMore": "Afficher {count} de plus"
   },
   "categories": {
     "sprint": "Sprint",
