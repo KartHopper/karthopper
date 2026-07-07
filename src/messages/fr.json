@@ -70,6 +70,18 @@
     "sheetDown": "Réduire le panneau",
     "recenter": "Recentrer"
   },
+  "circuit": {
+    "metaDescription": "Circuit de karting {name} à {city}, {country}. Prochaines courses Sodi World Series, infos et accès.",
+    "photoAlt": "Photo du circuit {name}",
+    "viewOnSws": "Voir sur SWS",
+    "upcomingTitle": "Prochaines courses",
+    "noUpcoming": "Aucune course à venir sur ce circuit",
+    "address": "Adresse",
+    "phone": "Téléphone",
+    "website": "Site web",
+    "indoor": "Indoor",
+    "outdoor": "Outdoor"
+  },
   "footer": {
     "legalNotice": "Mentions légales",
     "privacy": "Confidentialité",

@@ -70,6 +70,18 @@
     "sheetDown": "Collapse panel",
     "recenter": "Recenter"
   },
+  "circuit": {
+    "metaDescription": "{name} karting track in {city}, {country}. Upcoming Sodi World Series races, info and access.",
+    "photoAlt": "Photo of {name} track",
+    "viewOnSws": "View on SWS",
+    "upcomingTitle": "Upcoming races",
+    "noUpcoming": "No upcoming races at this track",
+    "address": "Address",
+    "phone": "Phone",
+    "website": "Website",
+    "indoor": "Indoor",
+    "outdoor": "Outdoor"
+  },
   "footer": {
     "legalNotice": "Legal notice",
     "privacy": "Privacy",
