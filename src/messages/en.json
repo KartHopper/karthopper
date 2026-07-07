@@ -32,7 +32,11 @@
     "reset": "Reset filters",
     "geoError": "Couldn't access your location. Try entering your city instead.",
     "myPosition": "My position",
-    "cityPlaceholder": "Your city…"
+    "cityPlaceholder": "Your city…",
+    "noLimit": "No limit",
+    "needOrigin": "Pick a position first",
+    "dateFrom": "From",
+    "dateTo": "To"
   },
   "categories": {
     "sprint": "Sprint",
