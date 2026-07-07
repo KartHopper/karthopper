@@ -5,7 +5,8 @@
     "language": "English",
     "loading": "Loading…",
     "error": "An error occurred",
-    "retry": "Retry"
+    "retry": "Retry",
+    "close": "Close"
   },
   "nav": {
     "map": "Map",
@@ -29,7 +30,9 @@
     "results": "{count} races found",
     "noResults": "No races found",
     "reset": "Reset filters",
-    "geoError": "Couldn't access your location. Try entering your city instead."
+    "geoError": "Couldn't access your location. Try entering your city instead.",
+    "myPosition": "My position",
+    "cityPlaceholder": "Your city…"
   },
   "categories": {
     "sprint": "Sprint",
@@ -45,6 +48,14 @@
     "closesInDays": "Closes in {count} days",
     "registerOnSws": "Register on SWS",
     "budget": "Budget"
+  },
+  "map": {
+    "metaTitle": "Karting tracks and SWS race map — KartHopper",
+    "metaDescription": "Interactive map of Sodi World Series karting tracks. Find the next races near you.",
+    "missingKey": "The map isn't available right now (missing map tile key).",
+    "upcomingCount": "{count} upcoming races",
+    "noUpcoming": "No upcoming races at this track",
+    "viewCircuit": "View track"
   },
   "footer": {
     "legalNotice": "Legal notice",

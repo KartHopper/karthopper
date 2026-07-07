@@ -5,7 +5,8 @@
     "language": "Français",
     "loading": "Chargement…",
     "error": "Une erreur est survenue",
-    "retry": "Réessayer"
+    "retry": "Réessayer",
+    "close": "Fermer"
   },
   "nav": {
     "map": "Carte",
@@ -29,7 +30,9 @@
     "results": "{count} courses trouvées",
     "noResults": "Aucune course trouvée",
     "reset": "Réinitialiser les filtres",
-    "geoError": "Impossible d'accéder à ta position. Essaie de saisir ta ville."
+    "geoError": "Impossible d'accéder à ta position. Essaie de saisir ta ville.",
+    "myPosition": "Ma position",
+    "cityPlaceholder": "Ta ville…"
   },
   "categories": {
     "sprint": "Sprint",
@@ -45,6 +48,14 @@
     "closesInDays": "Clôture dans {count} jours",
     "registerOnSws": "S'inscrire sur SWS",
     "budget": "Budget"
+  },
+  "map": {
+    "metaTitle": "Carte des circuits et courses SWS — KartHopper",
+    "metaDescription": "Carte interactive des circuits de karting Sodi World Series. Trouve les prochaines courses près de chez toi.",
+    "missingKey": "La carte n'est pas disponible pour le moment (clé de fond de carte manquante).",
+    "upcomingCount": "{count} courses à venir",
+    "noUpcoming": "Aucune course à venir sur ce circuit",
+    "viewCircuit": "Voir le circuit"
   },
   "footer": {
     "legalNotice": "Mentions légales",
