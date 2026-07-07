@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# KartHopper
 
-## Getting Started
+Trouve ta prochaine course de karting en 30 secondes. Carte interactive des
+circuits Sodi World Series (SWS), liste des courses filtrable par distance,
+période et catégorie, et passeport « karthopping » local pour suivre les
+circuits visités.
 
-First, run the development server:
+## Démarrer
+
+```bash
+npm install
+```
+
+Crée un fichier `.env.local` à la racine avec :
+
+```
+NEXT_PUBLIC_MAPTILER_API_KEY=<ta clé MapTiler>
+NEXT_PUBLIC_REFERENCE_DATE=2026-04-01
+```
+
+- `NEXT_PUBLIC_MAPTILER_API_KEY` : clé du fournisseur de tuiles cartographiques
+  (gratuite, voir cloud.maptiler.com). Sans elle, la page carte affiche un état
+  d'erreur.
+- `NEXT_PUBLIC_REFERENCE_DATE` : date "aujourd'hui" pilotable, utile tant que le
+  seed de données est périmé (voir ci-dessous). À retirer en production une
+  fois le pipeline de scraping réparé.
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+> ⚠️ **Le scraping SWS est actuellement bloqué par un reCAPTCHA** (constaté le
+> 2026-07-07). Ne relance pas les scripts `data:*` sans avoir lu
+> [`PIPELINE.md`](PIPELINE.md).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Données
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Voir [`public/data/README.md`](public/data/README.md) pour la provenance et la
+fraîcheur de chaque fichier JSON.
 
-## Learn More
+## Scripts
 
-To learn more about Next.js, take a look at the following resources:
+| Script | Rôle |
+|---|---|
+| `npm run dev` | Serveur de développement Next.js |
+| `npm run build` | Build de production |
+| `npm run lint` | ESLint |
+| `npm run data:fetch-circuits` | Scraping des circuits SWS → `circuits.json` |
+| `npm run data:scrape-races` | Scraping des courses SWS → `races.json` |
+| `npm run data:scrape-races:smoke` | Smoke test du scraping (5 courses max) |
+| `npm run data:scrape-races:test` | Scrape de test (limité) → `races.test.json` |
+| `npm run data:enrich-races` | Enrichissement LLM expérimental des courses |
+| `npm run data:validate` | Validation des fichiers de données générés |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Documentation projet
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [`CAHIER_DES_CHARGES.md`](CAHIER_DES_CHARGES.md) — cahier des charges complet (MVP, V2, V3)
+- [`DIRECTION_ARTISTIQUE.md`](DIRECTION_ARTISTIQUE.md) — palette, typographie, composants
+- [`PLAN_V1.md`](PLAN_V1.md) — plan d'exécution détaillé de la V1
+- [`PIPELINE.md`](PIPELINE.md) — état du pipeline de données SWS (une fois créé, Lot 7)
+- [`CLAUDE.md`](CLAUDE.md) / [`AGENTS.md`](AGENTS.md) — conventions pour les assistants IA
