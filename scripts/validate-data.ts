@@ -46,12 +46,15 @@ function percentage(part: number, total: number): string {
   return `${((part / total) * 100).toFixed(1)}%`;
 }
 
-function validate(circuits: Circuit[], races: Race[]): ValidationResult {
+function validate(
+  circuits: Circuit[],
+  races: Race[],
+  referenceDate: string
+): ValidationResult {
   const errors: string[] = [];
   const warnings: string[] = [];
-  const today = new Date().toISOString().slice(0, 10);
   const circuitIds = new Set(circuits.map((circuit) => circuit.id));
-  const futureRaces = races.filter((race) => race.date >= today);
+  const futureRaces = races.filter((race) => race.date >= referenceDate);
   const unmatchedRaces = races.filter((race) => !circuitIds.has(race.circuit_id));
   const racesWithoutIsoDate = races.filter(
     (race) => !/^\d{4}-\d{2}-\d{2}$/.test(race.date)
@@ -89,12 +92,15 @@ function validate(circuits: Circuit[], races: Race[]): ValidationResult {
 function main(): void {
   const racesFileName =
     readArgValue("races") ?? process.env.KH_RACES_FILE ?? "races.json";
+  const referenceDate =
+    readArgValue("reference-date") ??
+    process.env.KH_REFERENCE_DATE ??
+    new Date().toISOString().slice(0, 10);
   const circuitsPath = resolve(DATA_DIR, "circuits.json");
   const racesPath = resolve(DATA_DIR, racesFileName);
   const circuits = readJsonFile<Circuit[]>(circuitsPath);
   const races = readJsonFile<Race[]>(racesPath);
-  const today = new Date().toISOString().slice(0, 10);
-  const futureRaces = races.filter((race) => race.date >= today);
+  const futureRaces = races.filter((race) => race.date >= referenceDate);
   const racesWithPrice = races.filter((race) => race.price !== null);
   const racesWithSpots = races.filter((race) => race.spots_total !== null);
   const enrichedRaces = races.filter((race) => race.enrichment);
@@ -115,13 +121,14 @@ function main(): void {
     counts[race.category] = (counts[race.category] ?? 0) + 1;
     return counts;
   }, {});
-  const result = validate(circuits, races);
+  const result = validate(circuits, races, referenceDate);
 
   console.log("KartHopper data validation");
   console.log(`  Races file: ${racesFileName}`);
+  console.log(`  Reference date: ${referenceDate}`);
   console.log(`  Circuits: ${circuits.length}`);
   console.log(`  Races: ${races.length}`);
-  console.log(`  Future races since ${today}: ${futureRaces.length}`);
+  console.log(`  Future races since ${referenceDate}: ${futureRaces.length}`);
   console.log(`  Date range: ${dates[0] ?? "n/a"} -> ${dates.at(-1) ?? "n/a"}`);
   console.log(`  With price: ${racesWithPrice.length}/${races.length}`);
   console.log(`  With spots: ${racesWithSpots.length}/${races.length}`);
