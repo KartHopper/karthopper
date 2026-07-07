@@ -38,7 +38,9 @@
     "needOrigin": "Pick a position first",
     "dateFrom": "From",
     "dateTo": "To",
-    "showMore": "Show {count} more"
+    "showMore": "Show {count} more",
+    "share": "Share these filters",
+    "linkCopied": "Link copied!"
   },
   "categories": {
     "sprint": "Sprint",

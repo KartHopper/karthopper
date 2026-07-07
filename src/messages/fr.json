@@ -38,7 +38,9 @@
     "needOrigin": "Choisis d'abord une position",
     "dateFrom": "Du",
     "dateTo": "Au",
-    "showMore": "Afficher {count} de plus"
+    "showMore": "Afficher {count} de plus",
+    "share": "Partager ces filtres",
+    "linkCopied": "Lien copié !"
   },
   "categories": {
     "sprint": "Sprint",

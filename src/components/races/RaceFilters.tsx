@@ -1,6 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import { useTranslations } from "next-intl";
+import { Share2 } from "lucide-react";
 import { useFiltersStore } from "@/store/filters";
 import { getReferenceDate } from "@/lib/reference-date";
 import { OriginPicker } from "@/components/map/OriginPicker";
@@ -31,8 +33,16 @@ export function RaceFilters({ resultCount }: RaceFiltersProps) {
   const setDateRange = useFiltersStore((state) => state.setDateRange);
   const toggleCategory = useFiltersStore((state) => state.toggleCategory);
   const resetFilters = useFiltersStore((state) => state.resetFilters);
+  const [linkCopied, setLinkCopied] = useState(false);
 
   const effectiveDateFrom = dateFrom ?? getReferenceDate();
+
+  function handleShare() {
+    navigator.clipboard.writeText(window.location.href).then(() => {
+      setLinkCopied(true);
+      setTimeout(() => setLinkCopied(false), 2000);
+    });
+  }
 
   return (
     <div className="flex flex-col gap-3">
@@ -121,6 +131,20 @@ export function RaceFilters({ resultCount }: RaceFiltersProps) {
       <p className="text-sm font-medium tabular-nums text-slate-700">
         {t("filters.results", { count: resultCount })}
       </p>
+
+      <div className="flex items-center gap-2">
+        <button
+          type="button"
+          onClick={handleShare}
+          className="inline-flex items-center gap-1.5 self-start rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2"
+        >
+          <Share2 className="h-3.5 w-3.5" />
+          {t("filters.share")}
+        </button>
+        <span aria-live="polite" className="text-xs text-green-700">
+          {linkCopied ? t("filters.linkCopied") : ""}
+        </span>
+      </div>
     </div>
   );
 }

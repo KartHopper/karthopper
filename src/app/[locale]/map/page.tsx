@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { getTranslations } from "next-intl/server";
 import { MapScreen } from "@/components/map/MapScreen";
 
@@ -13,7 +14,9 @@ export async function generateMetadata(): Promise<Metadata> {
 export default function MapPage() {
   return (
     <div className="flex h-[calc(100dvh-3.5rem)]">
-      <MapScreen />
+      <Suspense fallback={null}>
+        <MapScreen />
+      </Suspense>
     </div>
   );
 }

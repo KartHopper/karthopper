@@ -13,6 +13,7 @@ import { RaceFilters } from "@/components/races/RaceFilters";
 import { RaceList } from "@/components/races/RaceList";
 import { EmptyState } from "@/components/EmptyState";
 import { BottomSheet, type SheetState } from "@/components/map/BottomSheet";
+import { UrlFiltersSync } from "@/components/map/UrlFiltersSync";
 
 const ORIGIN_ZOOM = 7;
 const CIRCUIT_ZOOM = 10;
@@ -40,20 +41,26 @@ export function MapScreen() {
 
   if (loading) {
     return (
-      <div className="h-full w-full animate-pulse bg-slate-100 motion-reduce:animate-none" />
+      <>
+        <UrlFiltersSync />
+        <div className="h-full w-full animate-pulse bg-slate-100 motion-reduce:animate-none" />
+      </>
     );
   }
 
   if (error || !circuits || !races) {
     return (
-      <div className="flex h-full w-full items-center justify-center">
-        <EmptyState
-          icon={AlertTriangle}
-          title={t("common.error")}
-          description={t("emptyStates.loadErrorHint")}
-          action={{ label: t("common.retry"), onClick: retry }}
-        />
-      </div>
+      <>
+        <UrlFiltersSync />
+        <div className="flex h-full w-full items-center justify-center">
+          <EmptyState
+            icon={AlertTriangle}
+            title={t("common.error")}
+            description={t("emptyStates.loadErrorHint")}
+            action={{ label: t("common.retry"), onClick: retry }}
+          />
+        </div>
+      </>
     );
   }
 
@@ -110,6 +117,8 @@ export function MapScreen() {
 
   return (
     <div className="flex h-full w-full">
+      <UrlFiltersSync />
+
       <aside className="hidden w-[380px] shrink-0 flex-col lg:flex">
         <div className="border-b border-slate-200 bg-slate-50 p-4">
           <RaceFilters resultCount={filtered.length} />
