@@ -61,7 +61,11 @@
     "missingKey": "La carte n'est pas disponible pour le moment (clé de fond de carte manquante).",
     "upcomingCount": "{count} courses à venir",
     "noUpcoming": "Aucune course à venir sur ce circuit",
-    "viewCircuit": "Voir le circuit"
+    "viewCircuit": "Voir le circuit",
+    "sheetToggle": "Agrandir ou réduire le panneau",
+    "sheetUp": "Agrandir le panneau",
+    "sheetDown": "Réduire le panneau",
+    "recenter": "Recentrer"
   },
   "footer": {
     "legalNotice": "Mentions légales",

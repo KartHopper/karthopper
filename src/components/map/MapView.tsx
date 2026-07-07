@@ -22,8 +22,8 @@ interface MapViewProps {
   passportMode?: boolean;
   onSelectCircuit(id: number | null): void;
   selectedCircuitId: number | null;
-  /** Circuit à recentrer/zoomer (déclenché par une sélection depuis la liste, pas la carte). */
-  flyToCircuitId?: number | null;
+  /** Position à recentrer/zoomer (sélection depuis la liste ou bouton recentrer — pas un clic sur la carte). */
+  flyTo?: { lat: number; lng: number; zoom: number } | null;
   children?: React.ReactNode;
 }
 
@@ -65,7 +65,7 @@ export function MapView({
   passportMode = false,
   onSelectCircuit,
   selectedCircuitId,
-  flyToCircuitId = null,
+  flyTo = null,
   children,
 }: MapViewProps) {
   const t = useTranslations();
@@ -74,14 +74,12 @@ export function MapView({
   const apiKey = process.env.NEXT_PUBLIC_MAPTILER_API_KEY;
 
   useEffect(() => {
-    if (flyToCircuitId === null) return;
-    const circuit = circuits.find((item) => item.id === flyToCircuitId);
+    if (!flyTo) return;
     const map = mapRef.current?.getMap();
-    if (circuit && map) {
-      map.easeTo({ center: [circuit.lng, circuit.lat], zoom: 10 });
+    if (map) {
+      map.easeTo({ center: [flyTo.lng, flyTo.lat], zoom: flyTo.zoom });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- ne déclencher que sur un nouveau flyToCircuitId
-  }, [flyToCircuitId]);
+  }, [flyTo]);
 
   const initialViewState = useMemo(
     () =>

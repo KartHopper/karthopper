@@ -61,7 +61,11 @@
     "missingKey": "The map isn't available right now (missing map tile key).",
     "upcomingCount": "{count} upcoming races",
     "noUpcoming": "No upcoming races at this track",
-    "viewCircuit": "View track"
+    "viewCircuit": "View track",
+    "sheetToggle": "Expand or collapse the panel",
+    "sheetUp": "Expand panel",
+    "sheetDown": "Collapse panel",
+    "recenter": "Recenter"
   },
   "footer": {
     "legalNotice": "Legal notice",
