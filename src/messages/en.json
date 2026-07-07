@@ -1,0 +1,53 @@
+{
+  "common": {
+    "appName": "KartHopper",
+    "tagline": "Find your next karting race",
+    "language": "English",
+    "loading": "Loading…",
+    "error": "An error occurred",
+    "retry": "Retry"
+  },
+  "nav": {
+    "map": "Map",
+    "calendar": "Calendar",
+    "login": "Log in",
+    "premium": "Premium"
+  },
+  "home": {
+    "heroTitle": "Find your next karting race in 30 seconds",
+    "heroSubtitle": "Interactive map of Sodi World Series races. Filter by distance, price, category.",
+    "cta": "Explore the map",
+    "racesCount": "{count} upcoming races"
+  },
+  "filters": {
+    "distance": "Distance",
+    "date": "Date",
+    "category": "Category",
+    "price": "Max price",
+    "country": "Country",
+    "search": "Search a track or city…",
+    "results": "{count} races found",
+    "noResults": "No races found",
+    "reset": "Reset filters"
+  },
+  "categories": {
+    "sprint": "Sprint",
+    "endurance": "Endurance",
+    "junior": "Junior",
+    "other": "Other"
+  },
+  "race": {
+    "spots": "{taken}/{total} spots",
+    "spotsLeft": "Only {count} spots left",
+    "full": "Full",
+    "closesTomorrow": "Closes tomorrow",
+    "closesInDays": "Closes in {count} days",
+    "registerOnSws": "Register on SWS",
+    "budget": "Budget"
+  },
+  "footer": {
+    "legalNotice": "Legal notice",
+    "privacy": "Privacy",
+    "madeWith": "Made with passion for karting"
+  }
+}

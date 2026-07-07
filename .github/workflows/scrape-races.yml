@@ -1,0 +1,36 @@
+name: Scrape SWS Races
+
+on:
+  schedule:
+    - cron: "0 5 * * *" # Daily 5:00 UTC
+  workflow_dispatch: # Manual trigger
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Scrape races from SWS
+        run: npx tsx scripts/scrape-races.ts
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add public/data/races.json public/data/unmatched.json
+          if ! git diff --staged --quiet; then
+            git commit -m "data: update races.json"
+            git push
+          fi

@@ -1,0 +1,53 @@
+{
+  "common": {
+    "appName": "KartHopper",
+    "tagline": "Trouve ta prochaine course de karting",
+    "language": "Français",
+    "loading": "Chargement…",
+    "error": "Une erreur est survenue",
+    "retry": "Réessayer"
+  },
+  "nav": {
+    "map": "Carte",
+    "calendar": "Calendrier",
+    "login": "Connexion",
+    "premium": "Premium"
+  },
+  "home": {
+    "heroTitle": "Trouve ta prochaine course de karting en 30 secondes",
+    "heroSubtitle": "Carte interactive des courses Sodi World Series. Filtre par distance, prix, catégorie.",
+    "cta": "Explorer la carte",
+    "racesCount": "{count} courses à venir"
+  },
+  "filters": {
+    "distance": "Distance",
+    "date": "Date",
+    "category": "Catégorie",
+    "price": "Prix max",
+    "country": "Pays",
+    "search": "Rechercher un circuit ou une ville…",
+    "results": "{count} courses trouvées",
+    "noResults": "Aucune course trouvée",
+    "reset": "Réinitialiser les filtres"
+  },
+  "categories": {
+    "sprint": "Sprint",
+    "endurance": "Endurance",
+    "junior": "Junior",
+    "other": "Autre"
+  },
+  "race": {
+    "spots": "{taken}/{total} places",
+    "spotsLeft": "Plus que {count} places",
+    "full": "Complet",
+    "closesTomorrow": "Clôture demain",
+    "closesInDays": "Clôture dans {count} jours",
+    "registerOnSws": "S'inscrire sur SWS",
+    "budget": "Budget"
+  },
+  "footer": {
+    "legalNotice": "Mentions légales",
+    "privacy": "Confidentialité",
+    "madeWith": "Fait avec passion pour le karting"
+  }
+}
