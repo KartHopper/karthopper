@@ -84,7 +84,9 @@
   },
   "passport": {
     "markVisited": "I've raced here",
-    "visited": "Visited"
+    "visited": "Visited",
+    "summary": "{circuits} tracks · {countries} countries",
+    "mapMode": "Passport"
   },
   "footer": {
     "legalNotice": "Legal notice",

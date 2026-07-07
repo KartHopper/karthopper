@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { AlertTriangle, Locate, SearchX } from "lucide-react";
 import { useKarthopperData } from "@/hooks/use-karthopper-data";
@@ -14,6 +14,8 @@ import { RaceList } from "@/components/races/RaceList";
 import { EmptyState } from "@/components/EmptyState";
 import { BottomSheet, type SheetState } from "@/components/map/BottomSheet";
 import { UrlFiltersSync } from "@/components/map/UrlFiltersSync";
+import { PassportSummary } from "@/components/passport/PassportSummary";
+import { usePassportStore } from "@/store/passport";
 
 const ORIGIN_ZOOM = 7;
 const CIRCUIT_ZOOM = 10;
@@ -36,8 +38,17 @@ export function MapScreen() {
   const selectedCircuitId = useFiltersStore((state) => state.selectedCircuitId);
   const setSelectedCircuitId = useFiltersStore((state) => state.setSelectedCircuitId);
   const resetFilters = useFiltersStore((state) => state.resetFilters);
+  const visits = usePassportStore((state) => state.visits);
   const [flyTo, setFlyTo] = useState<FlyTo | null>(null);
   const [sheetState, setSheetState] = useState<SheetState>("peek");
+  const [passportMode, setPassportMode] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    // Nécessaire pour éviter un mismatch d'hydratation (cf. VisitToggle).
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMounted(true);
+  }, []);
 
   if (loading) {
     return (
@@ -80,6 +91,7 @@ export function MapScreen() {
   });
   const selectedCircuit =
     selectedCircuitId !== null ? circuitsById.get(selectedCircuitId) : undefined;
+  const visitedIds = new Set(mounted ? Object.keys(visits).map(Number) : []);
 
   function handleSelectFromList(circuitId: number) {
     setSelectedCircuitId(circuitId);
@@ -120,6 +132,22 @@ export function MapScreen() {
       <UrlFiltersSync />
 
       <aside className="hidden w-[380px] shrink-0 flex-col lg:flex">
+        <div className="flex items-center justify-between gap-2 border-b border-slate-200 bg-slate-50 p-4">
+          <PassportSummary circuits={circuitsById} />
+          <button
+            type="button"
+            role="switch"
+            aria-checked={passportMode}
+            onClick={() => setPassportMode((value) => !value)}
+            className={`rounded-lg border px-2.5 py-1 text-xs font-medium focus-visible:ring-2 focus-visible:ring-kart-500 focus-visible:ring-offset-2 ${
+              passportMode
+                ? "border-kart-500 bg-kart-50 text-kart-700"
+                : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
+            }`}
+          >
+            {t("passport.mapMode")}
+          </button>
+        </div>
         <div className="border-b border-slate-200 bg-slate-50 p-4">
           <RaceFilters resultCount={filtered.length} />
         </div>
@@ -130,6 +158,8 @@ export function MapScreen() {
         <MapView
           circuits={circuits}
           upcomingCountByCircuit={upcomingCountByCircuit}
+          visitedIds={visitedIds}
+          passportMode={passportMode}
           selectedCircuitId={selectedCircuitId}
           flyTo={flyTo}
           onSelectCircuit={setSelectedCircuitId}
@@ -161,6 +191,22 @@ export function MapScreen() {
         onStateChange={setSheetState}
         peekContent={
           <div className="flex flex-col gap-1">
+            <div className="flex items-center justify-between gap-2">
+              <PassportSummary circuits={circuitsById} />
+              <button
+                type="button"
+                role="switch"
+                aria-checked={passportMode}
+                onClick={() => setPassportMode((value) => !value)}
+                className={`rounded-lg border px-2.5 py-1 text-xs font-medium focus-visible:ring-2 focus-visible:ring-kart-500 focus-visible:ring-offset-2 ${
+                  passportMode
+                    ? "border-kart-500 bg-kart-50 text-kart-700"
+                    : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
+                }`}
+              >
+                {t("passport.mapMode")}
+              </button>
+            </div>
             <p className="text-sm font-medium tabular-nums text-slate-700">
               {t("filters.results", { count: filtered.length })}
             </p>

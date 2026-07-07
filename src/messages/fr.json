@@ -84,7 +84,9 @@
   },
   "passport": {
     "markVisited": "J'y ai roulé",
-    "visited": "Visité"
+    "visited": "Visité",
+    "summary": "{circuits} circuits · {countries} pays",
+    "mapMode": "Passeport"
   },
   "footer": {
     "legalNotice": "Mentions légales",
