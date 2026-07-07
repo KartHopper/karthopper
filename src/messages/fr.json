@@ -28,7 +28,8 @@
     "search": "Rechercher un circuit ou une ville…",
     "results": "{count} courses trouvées",
     "noResults": "Aucune course trouvée",
-    "reset": "Réinitialiser les filtres"
+    "reset": "Réinitialiser les filtres",
+    "geoError": "Impossible d'accéder à ta position. Essaie de saisir ta ville."
   },
   "categories": {
     "sprint": "Sprint",

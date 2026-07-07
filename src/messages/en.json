@@ -28,7 +28,8 @@
     "search": "Search a track or city…",
     "results": "{count} races found",
     "noResults": "No races found",
-    "reset": "Reset filters"
+    "reset": "Reset filters",
+    "geoError": "Couldn't access your location. Try entering your city instead."
   },
   "categories": {
     "sprint": "Sprint",
