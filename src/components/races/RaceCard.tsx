@@ -1,9 +1,10 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { Calendar, Car, MapPin } from "lucide-react";
+import { Calendar, CalendarPlus, Car, MapPin } from "lucide-react";
 import { Badge } from "@/components/Badge";
 import { getReferenceDate } from "@/lib/reference-date";
+import { buildRaceIcs } from "@/lib/ics";
 import type { Race } from "@/types/race";
 import type { Circuit } from "@/types/circuit";
 
@@ -50,6 +51,19 @@ export function RaceCard({ race, circuit, distanceKm, locale, selected, onSelect
 
   function handleKeyDown(event: React.KeyboardEvent<HTMLElement>) {
     if (event.key === "Enter" && onSelect) onSelect();
+  }
+
+  function handleAddToCalendar(event: React.MouseEvent) {
+    event.stopPropagation();
+    const blob = new Blob([buildRaceIcs(race, circuit)], {
+      type: "text/calendar;charset=utf-8",
+    });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `karthopper-${race.id}.ics`;
+    link.click();
+    URL.revokeObjectURL(url);
   }
 
   return (
@@ -116,15 +130,26 @@ export function RaceCard({ race, circuit, distanceKm, locale, selected, onSelect
             }).format(race.price)}
           </span>
         )}
-        <a
-          href={race.sws_url}
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={(event) => event.stopPropagation()}
-          className="ml-auto rounded-lg px-2 py-1 text-sm font-medium text-kart-700 hover:bg-kart-50 focus-visible:ring-2 focus-visible:ring-kart-500 focus-visible:ring-offset-2"
-        >
-          {t("race.registerOnSws")}
-        </a>
+        <div className="ml-auto flex items-center gap-1">
+          <button
+            type="button"
+            onClick={handleAddToCalendar}
+            aria-label={t("race.addToCalendar")}
+            title={t("race.addToCalendar")}
+            className="rounded-lg p-1.5 text-kart-700 hover:bg-kart-50 focus-visible:ring-2 focus-visible:ring-kart-500 focus-visible:ring-offset-2"
+          >
+            <CalendarPlus className="h-4 w-4" />
+          </button>
+          <a
+            href={race.sws_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(event) => event.stopPropagation()}
+            className="rounded-lg px-2 py-1 text-sm font-medium text-kart-700 hover:bg-kart-50 focus-visible:ring-2 focus-visible:ring-kart-500 focus-visible:ring-offset-2"
+          >
+            {t("race.registerOnSws")}
+          </a>
+        </div>
       </div>
     </article>
   );

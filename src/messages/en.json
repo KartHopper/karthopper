@@ -55,7 +55,8 @@
     "closesTomorrow": "Closes tomorrow",
     "closesInDays": "Closes in {count} days",
     "registerOnSws": "Register on SWS",
-    "budget": "Budget"
+    "budget": "Budget",
+    "addToCalendar": "Add to my calendar"
   },
   "map": {
     "metaTitle": "Karting tracks and SWS race map — KartHopper",
