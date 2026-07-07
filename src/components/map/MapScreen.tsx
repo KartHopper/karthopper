@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
+import { AlertTriangle, SearchX } from "lucide-react";
 import { useKarthopperData } from "@/hooks/use-karthopper-data";
 import { getReferenceDate } from "@/lib/reference-date";
 import { applyFilters, circuitById, racesByCircuitId, upcomingRaces } from "@/lib/races";
@@ -10,6 +11,7 @@ import { MapView } from "@/components/map/MapView";
 import { CircuitPopup } from "@/components/map/CircuitPopup";
 import { RaceFilters } from "@/components/races/RaceFilters";
 import { RaceList } from "@/components/races/RaceList";
+import { EmptyState } from "@/components/EmptyState";
 
 export function MapScreen() {
   const t = useTranslations();
@@ -22,6 +24,7 @@ export function MapScreen() {
   const categories = useFiltersStore((state) => state.categories);
   const selectedCircuitId = useFiltersStore((state) => state.selectedCircuitId);
   const setSelectedCircuitId = useFiltersStore((state) => state.setSelectedCircuitId);
+  const resetFilters = useFiltersStore((state) => state.resetFilters);
   const [flyToCircuitId, setFlyToCircuitId] = useState<number | null>(null);
 
   if (loading) {
@@ -32,15 +35,13 @@ export function MapScreen() {
 
   if (error || !circuits || !races) {
     return (
-      <div className="flex h-full w-full flex-col items-center justify-center gap-3 p-6 text-center">
-        <p className="text-sm text-slate-500">{t("common.error")}</p>
-        <button
-          type="button"
-          onClick={retry}
-          className="rounded-lg bg-kart-500 px-4 py-2 text-sm font-medium text-white hover:bg-kart-400 focus-visible:ring-2 focus-visible:ring-kart-500 focus-visible:ring-offset-2"
-        >
-          {t("common.retry")}
-        </button>
+      <div className="flex h-full w-full items-center justify-center">
+        <EmptyState
+          icon={AlertTriangle}
+          title={t("common.error")}
+          description={t("emptyStates.loadErrorHint")}
+          action={{ label: t("common.retry"), onClick: retry }}
+        />
       </div>
     );
   }
@@ -74,14 +75,28 @@ export function MapScreen() {
           <RaceFilters resultCount={filtered.length} />
         </div>
         <div className="flex-1 overflow-y-auto p-4">
-          <RaceList
-            races={filtered}
-            circuits={circuitsById}
-            origin={origin}
-            locale={locale}
-            selectedCircuitId={selectedCircuitId}
-            onSelectCircuit={handleSelectFromList}
-          />
+          {filtered.length === 0 ? (
+            <EmptyState
+              icon={SearchX}
+              title={t("filters.noResults")}
+              description={t("filters.noResultsHint")}
+              action={{ label: t("filters.reset"), onClick: resetFilters }}
+            />
+          ) : (
+            <>
+              {origin === null && (
+                <p className="mb-3 text-sm text-slate-500">{t("emptyStates.noOriginHint")}</p>
+              )}
+              <RaceList
+                races={filtered}
+                circuits={circuitsById}
+                origin={origin}
+                locale={locale}
+                selectedCircuitId={selectedCircuitId}
+                onSelectCircuit={handleSelectFromList}
+              />
+            </>
+          )}
         </div>
       </aside>
 

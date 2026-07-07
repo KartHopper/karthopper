@@ -29,6 +29,7 @@
     "search": "Rechercher un circuit ou une ville…",
     "results": "{count} courses trouvées",
     "noResults": "Aucune course trouvée",
+    "noResultsHint": "Essaie d'élargir tes filtres ou de chercher dans une autre zone.",
     "reset": "Réinitialiser les filtres",
     "geoError": "Impossible d'accéder à ta position. Essaie de saisir ta ville.",
     "myPosition": "Ma position",
@@ -66,5 +67,9 @@
     "legalNotice": "Mentions légales",
     "privacy": "Confidentialité",
     "madeWith": "Fait avec passion pour le karting"
+  },
+  "emptyStates": {
+    "loadErrorHint": "On n'a pas pu charger les courses. Réessaie dans quelques instants.",
+    "noOriginHint": "Choisis ta position pour trier les courses par distance."
   }
 }

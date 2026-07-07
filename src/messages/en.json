@@ -29,6 +29,7 @@
     "search": "Search a track or city…",
     "results": "{count} races found",
     "noResults": "No races found",
+    "noResultsHint": "Try widening your filters or searching a different area.",
     "reset": "Reset filters",
     "geoError": "Couldn't access your location. Try entering your city instead.",
     "myPosition": "My position",
@@ -66,5 +67,9 @@
     "legalNotice": "Legal notice",
     "privacy": "Privacy",
     "madeWith": "Made with passion for karting"
+  },
+  "emptyStates": {
+    "loadErrorHint": "We couldn't load the races. Try again in a moment.",
+    "noOriginHint": "Pick your position to sort races by distance."
   }
 }
