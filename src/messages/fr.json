@@ -82,6 +82,10 @@
     "indoor": "Indoor",
     "outdoor": "Outdoor"
   },
+  "passport": {
+    "markVisited": "J'y ai roulé",
+    "visited": "Visité"
+  },
   "footer": {
     "legalNotice": "Mentions légales",
     "privacy": "Confidentialité",

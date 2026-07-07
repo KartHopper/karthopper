@@ -82,6 +82,10 @@
     "indoor": "Indoor",
     "outdoor": "Outdoor"
   },
+  "passport": {
+    "markVisited": "I've raced here",
+    "visited": "Visited"
+  },
   "footer": {
     "legalNotice": "Legal notice",
     "privacy": "Privacy",

@@ -4,6 +4,7 @@ import { Popup } from "react-map-gl/maplibre";
 import { MapPin, Flag, X } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { Badge } from "@/components/Badge";
+import { VisitToggle } from "@/components/passport/VisitToggle";
 import { useTranslations } from "next-intl";
 import type { Circuit } from "@/types/circuit";
 import type { Race } from "@/types/race";
@@ -97,6 +98,8 @@ export function CircuitPopup({ circuit, upcoming, locale, onClose }: CircuitPopu
         >
           {t("map.viewCircuit")}
         </Link>
+
+        <VisitToggle circuitId={circuit.id} size="sm" />
       </div>
     </Popup>
   );

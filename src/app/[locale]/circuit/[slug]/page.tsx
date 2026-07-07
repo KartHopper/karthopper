@@ -6,6 +6,7 @@ import { Link } from "@/i18n/navigation";
 import { Badge } from "@/components/Badge";
 import { EmptyState } from "@/components/EmptyState";
 import { CircuitPhoto } from "@/components/circuit/CircuitPhoto";
+import { VisitToggle } from "@/components/passport/VisitToggle";
 import { RaceCard } from "@/components/races/RaceCard";
 import { findCircuitBySlug, loadCircuits, loadRaces } from "@/lib/data";
 import { getReferenceDate } from "@/lib/reference-date";
@@ -99,6 +100,9 @@ export default async function CircuitPage({
               {t(trackType === "indoor" ? "circuit.indoor" : "circuit.outdoor")}
             </Badge>
           )}
+        </div>
+        <div className="mt-3">
+          <VisitToggle circuitId={circuit.id} />
         </div>
       </div>
 
