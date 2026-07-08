@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { AlertTriangle } from "lucide-react";
 import {
   Map,
@@ -79,6 +79,7 @@ export function MapView({
   children,
 }: MapViewProps) {
   const t = useTranslations();
+  const locale = useLocale();
   const mapRef = useRef<MapRef>(null);
   const origin = useFiltersStore((state) => state.origin);
   const apiKey = process.env.NEXT_PUBLIC_MAPTILER_API_KEY;
@@ -96,7 +97,7 @@ export function MapView({
   useEffect(() => {
     if (!apiKey) return;
     let cancelled = false;
-    loadKartHopperMapStyle(apiKey)
+    loadKartHopperMapStyle(apiKey, locale)
       .then((style) => {
         if (!cancelled) setMapStyle(style);
       })
@@ -106,7 +107,7 @@ export function MapView({
     return () => {
       cancelled = true;
     };
-  }, [apiKey]);
+  }, [apiKey, locale]);
 
   const initialViewState = useMemo(
     () =>

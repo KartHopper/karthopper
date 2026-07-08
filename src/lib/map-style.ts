@@ -3,9 +3,26 @@ import type { StyleSpecification } from "maplibre-gl";
 const POSITRON_BASE_URL = "https://api.maptiler.com/maps/positron/style.json";
 
 let cachedStyle: StyleSpecification | null = null;
-let cachedApiKey: string | null = null;
+let cachedKey: string | null = null;
 
-function patchLayer(layer: StyleSpecification["layers"][number]): void {
+type StyleLayer = StyleSpecification["layers"][number];
+type SymbolLayer = Extract<StyleLayer, { type: "symbol" }>;
+type TextField = NonNullable<SymbolLayer["layout"]>["text-field"];
+
+/**
+ * Étiquette localisée : nom dans la langue de l'UI, sinon translittération latine,
+ * sinon nom local (fallbacks pour les lieux sans traduction dans les tuiles).
+ */
+function localizedTextField(locale: string): TextField {
+  return [
+    "coalesce",
+    ["get", `name:${locale}`],
+    ["get", "name:latin"],
+    ["get", "name"],
+  ] as unknown as TextField;
+}
+
+function patchLayer(layer: StyleLayer, locale: string): void {
   const id = layer.id.toLowerCase();
 
   if (id.includes("background") && layer.type === "background") {
@@ -44,14 +61,27 @@ function patchLayer(layer: StyleSpecification["layers"][number]): void {
     return;
   }
 
-  if ((id.includes("place") || id.includes("label")) && layer.type === "symbol") {
-    layer.paint = { ...layer.paint, "text-color": "#64748B" };
+  if (layer.type === "symbol" && layer.layout) {
+    // Localiser les étiquettes qui affichent un nom (villes, pays, cours d'eau…),
+    // sans toucher aux libellés type {ref} (numéros de route).
+    const textField = layer.layout["text-field"];
+    if (textField !== undefined && JSON.stringify(textField).includes("name")) {
+      layer.layout = { ...layer.layout, "text-field": localizedTextField(locale) };
+    }
+
+    if (id.includes("place") || id.includes("label")) {
+      layer.paint = { ...layer.paint, "text-color": "#64748B" };
+    }
   }
 }
 
-/** Charge le style Positron MapTiler et applique la palette KartHopper (DA §5). */
-export async function loadKartHopperMapStyle(apiKey: string): Promise<StyleSpecification> {
-  if (cachedStyle && cachedApiKey === apiKey) {
+/** Charge le style Positron MapTiler et applique la palette KartHopper (DA §5) + labels localisés. */
+export async function loadKartHopperMapStyle(
+  apiKey: string,
+  locale: string
+): Promise<StyleSpecification> {
+  const key = `${apiKey}|${locale}`;
+  if (cachedStyle && cachedKey === key) {
     return cachedStyle;
   }
 
@@ -62,10 +92,10 @@ export async function loadKartHopperMapStyle(apiKey: string): Promise<StyleSpeci
 
   const style = (await response.json()) as StyleSpecification;
   for (const layer of style.layers) {
-    patchLayer(layer);
+    patchLayer(layer, locale);
   }
 
   cachedStyle = style;
-  cachedApiKey = apiKey;
+  cachedKey = key;
   return style;
 }
