@@ -163,8 +163,9 @@ export function MapScreen() {
     <div className="flex h-full w-full">
       <UrlFiltersSync />
 
-      <aside className="hidden w-[380px] shrink-0 flex-col lg:flex">
-        <div className="flex flex-col gap-2 border-b border-slate-200 bg-slate-50 p-4">
+      {/* Colonne gauche (desktop) : passeport + filtres */}
+      <aside className="hidden w-[300px] shrink-0 flex-col border-r border-slate-200 bg-slate-50 lg:flex">
+        <div className="flex flex-col gap-2 border-b border-slate-200 p-4">
           <div className="flex items-center justify-between gap-2">
             <PassportSummary circuits={circuitsById} />
             <button
@@ -183,11 +184,8 @@ export function MapScreen() {
           </div>
           <PassportTransfer />
         </div>
-        <div className="flex-1 overflow-y-auto">
-          <div className="sticky top-0 z-10 border-b border-slate-200 bg-slate-50 p-4">
-            <RaceFilters resultCount={filteredEvents.length} />
-          </div>
-          <div className="p-4">{listContent}</div>
+        <div className="p-4">
+          <RaceFilters resultCount={filteredEvents.length} />
         </div>
       </aside>
 
@@ -223,6 +221,11 @@ export function MapScreen() {
           </button>
         )}
       </div>
+
+      {/* Colonne droite (desktop) : liste des courses */}
+      <aside className="hidden w-[380px] shrink-0 flex-col overflow-y-auto border-l border-slate-200 lg:flex">
+        <div className="p-4">{listContent}</div>
+      </aside>
 
       <BottomSheet
         state={sheetState}
