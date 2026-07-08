@@ -11,6 +11,7 @@ import {
   SWS_ENDPOINTS,
   SWS_FETCH_TIMEOUT_MS,
   SWS_HEADERS,
+  looksLikeSwsCaptcha,
 } from "../src/lib/config";
 import type { Circuit } from "../src/types/circuit";
 
@@ -101,7 +102,12 @@ async function fetchCircuits(): Promise<Circuit[]> {
     throw new Error(`HTTP ${response.status} for ${SWS_ENDPOINTS.circuits}`);
   }
 
-  const payload: unknown = await response.json();
+  const body = await response.text();
+  if (looksLikeSwsCaptcha(body)) {
+    throw new Error("SWS_CAPTCHA: scraping bloqué par reCAPTCHA — voir PIPELINE.md");
+  }
+
+  const payload: unknown = JSON.parse(body);
   const circuits = getMarkers(payload)
     .map(normalizeCircuit)
     .filter((circuit): circuit is Circuit => circuit !== null)

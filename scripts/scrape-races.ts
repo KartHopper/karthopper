@@ -15,6 +15,7 @@ import {
   SWS_HEADERS,
   SWS_REQUEST_DELAY_MS,
   getSwsLocale,
+  looksLikeSwsCaptcha,
 } from "../src/lib/config";
 import type { Circuit } from "../src/types/circuit";
 import type { Race, RaceCategory } from "../src/types/race";
@@ -99,7 +100,13 @@ async function fetchHtml(url: string): Promise<string> {
     signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
   });
   if (!response.ok) throw new Error(`HTTP ${response.status} for ${absoluteUrl}`);
-  return response.text();
+
+  const body = await response.text();
+  if (looksLikeSwsCaptcha(body)) {
+    throw new Error("SWS_CAPTCHA: scraping bloqué par reCAPTCHA — voir PIPELINE.md");
+  }
+
+  return body;
 }
 
 function normalizeWhitespace(value: string): string {

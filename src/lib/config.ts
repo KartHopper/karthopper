@@ -19,6 +19,11 @@ export function getSwsLocale(countryIso: string): string {
   return countryIso.toLowerCase() === "fr" ? "fr-fr" : "en-gb";
 }
 
+/** SWS renvoie une page reCAPTCHA (~1,2 Ko) au lieu du contenu quand le scraping est bloqué. */
+export function looksLikeSwsCaptcha(body: string): boolean {
+  return body.length < 5000 && body.includes("reCAPTCHA");
+}
+
 /** Delay between SWS requests (ms); can be lowered for local smoke tests. */
 export const SWS_REQUEST_DELAY_MS = Number.parseInt(
   process.env.SWS_REQUEST_DELAY_MS ?? "1000",
