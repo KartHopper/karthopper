@@ -30,7 +30,7 @@ export function PassportSummary({ circuits }: PassportSummaryProps) {
 
   return (
     <p className="flex items-center gap-1.5 text-sm font-medium tabular-nums text-slate-700">
-      <Stamp className="h-4 w-4 text-kart-700" />
+      <Stamp className="h-4 w-4 text-kart-700" aria-hidden="true" />
       {t("passport.summary", { circuits: visitedCircuits.length, countries: countryCount })}
     </p>
   );

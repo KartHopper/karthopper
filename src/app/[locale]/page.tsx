@@ -11,7 +11,7 @@ export default function HomePage() {
   return (
     <div className="flex flex-col items-center justify-center px-4 py-24 text-center">
       <div className="mb-8 flex h-20 w-20 items-center justify-center rounded-2xl bg-kart-50">
-        <MapPin className="h-10 w-10 text-kart-500" />
+        <MapPin className="h-10 w-10 text-kart-500" aria-hidden="true" />
       </div>
 
       <h1 className="font-heading text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">
@@ -24,9 +24,9 @@ export default function HomePage() {
 
       <Link
         href="/map"
-        className="mt-10 inline-flex items-center gap-2 rounded-lg bg-kart-500 px-6 py-3 font-heading font-medium text-white transition-colors hover:bg-kart-400 focus-visible:ring-2 focus-visible:ring-kart-500 focus-visible:ring-offset-2"
+        className="mt-10 inline-flex items-center gap-2 rounded-lg bg-kart-500 px-6 py-3 font-heading font-medium text-white transition-colors motion-reduce:transition-none hover:bg-kart-400 focus-visible:ring-2 focus-visible:ring-kart-500 focus-visible:ring-offset-2"
       >
-        <MapPin className="h-5 w-5" />
+        <MapPin className="h-5 w-5" aria-hidden="true" />
         {t("home.cta")}
       </Link>
 

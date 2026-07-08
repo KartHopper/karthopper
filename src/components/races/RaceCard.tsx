@@ -90,7 +90,7 @@ export function RaceCard({ race, circuit, distanceKm, locale, selected, onSelect
 
       <div className="mt-2 grid grid-cols-2 gap-x-2 gap-y-1 text-sm text-slate-700">
         <span className="flex items-center gap-1.5">
-          <Calendar className="h-3.5 w-3.5" />
+          <Calendar className="h-3.5 w-3.5" aria-hidden="true" />
           {new Intl.DateTimeFormat(locale, {
             day: "numeric",
             month: "long",
@@ -99,13 +99,13 @@ export function RaceCard({ race, circuit, distanceKm, locale, selected, onSelect
         </span>
         {race.kart_model && (
           <span className="flex items-center gap-1.5">
-            <Car className="h-3.5 w-3.5" />
+            <Car className="h-3.5 w-3.5" aria-hidden="true" />
             {race.kart_model}
           </span>
         )}
         {distanceKm !== null && (
           <span className="flex items-center gap-1.5">
-            <MapPin className="h-3.5 w-3.5" />
+            <MapPin className="h-3.5 w-3.5" aria-hidden="true" />
             <span className="tabular-nums">{distanceKm} km</span>
           </span>
         )}
@@ -138,7 +138,7 @@ export function RaceCard({ race, circuit, distanceKm, locale, selected, onSelect
             title={t("race.addToCalendar")}
             className="rounded-lg p-1.5 text-kart-700 hover:bg-kart-50 focus-visible:ring-2 focus-visible:ring-kart-500 focus-visible:ring-offset-2"
           >
-            <CalendarPlus className="h-4 w-4" />
+            <CalendarPlus className="h-4 w-4" aria-hidden="true" />
           </button>
           <a
             href={race.sws_url}

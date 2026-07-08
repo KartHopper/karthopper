@@ -14,7 +14,7 @@ export function CircuitPhoto({ src, alt }: CircuitPhotoProps) {
   if (failed || !src) {
     return (
       <div className="flex aspect-video w-full max-w-2xl items-center justify-center rounded-lg bg-slate-100">
-        <ImageOff className="h-10 w-10 text-slate-400" />
+        <ImageOff className="h-10 w-10 text-slate-400" aria-hidden="true" />
       </div>
     );
   }

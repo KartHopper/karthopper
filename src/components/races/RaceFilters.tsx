@@ -138,7 +138,7 @@ export function RaceFilters({ resultCount }: RaceFiltersProps) {
           onClick={handleShare}
           className="inline-flex items-center gap-1.5 self-start rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2"
         >
-          <Share2 className="h-3.5 w-3.5" />
+          <Share2 className="h-3.5 w-3.5" aria-hidden="true" />
           {t("filters.share")}
         </button>
         <span aria-live="polite" className="text-xs text-green-700">

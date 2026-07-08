@@ -39,9 +39,9 @@ export function VisitToggle({ circuitId, size = "md" }: VisitToggleProps) {
       }`}
     >
       {visited ? (
-        <CheckCircle2 className={iconSizeClasses} />
+        <CheckCircle2 className={iconSizeClasses} aria-hidden="true" />
       ) : (
-        <Circle className={iconSizeClasses} />
+        <Circle className={iconSizeClasses} aria-hidden="true" />
       )}
       {visited ? t("passport.visited") : t("passport.markVisited")}
     </button>

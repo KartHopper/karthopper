@@ -58,7 +58,7 @@ export function BottomSheet({ state, onStateChange, peekContent, children }: Bot
           aria-label={t("map.sheetUp")}
           className="rounded-lg p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-600 focus-visible:ring-2 focus-visible:ring-kart-500 focus-visible:ring-offset-2"
         >
-          <ChevronUp className="h-4 w-4" />
+          <ChevronUp className="h-4 w-4" aria-hidden="true" />
         </button>
         <button
           type="button"
@@ -66,7 +66,7 @@ export function BottomSheet({ state, onStateChange, peekContent, children }: Bot
           aria-label={t("map.sheetDown")}
           className="rounded-lg p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-600 focus-visible:ring-2 focus-visible:ring-kart-500 focus-visible:ring-offset-2"
         >
-          <ChevronDown className="h-4 w-4" />
+          <ChevronDown className="h-4 w-4" aria-hidden="true" />
         </button>
       </div>
 

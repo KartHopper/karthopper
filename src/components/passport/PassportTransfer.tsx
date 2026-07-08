@@ -51,12 +51,12 @@ export function PassportTransfer() {
         onClick={handleExport}
         className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-2 py-1 text-slate-700 hover:bg-slate-50 focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2"
       >
-        <Download className="h-3.5 w-3.5" />
+        <Download className="h-3.5 w-3.5" aria-hidden="true" />
         {t("passport.export")}
       </button>
 
       <label className="inline-flex cursor-pointer items-center gap-1 rounded-lg border border-slate-200 bg-white px-2 py-1 text-slate-700 hover:bg-slate-50 focus-within:ring-2 focus-within:ring-slate-400 focus-within:ring-offset-2">
-        <Upload className="h-3.5 w-3.5" />
+        <Upload className="h-3.5 w-3.5" aria-hidden="true" />
         {t("passport.import")}
         <input
           type="file"

@@ -185,7 +185,7 @@ export function MapScreen() {
             aria-label={t("map.recenter")}
             className="absolute bottom-28 right-4 z-30 flex h-12 w-12 items-center justify-center rounded-full bg-white text-slate-700 shadow-card hover:bg-slate-50 focus-visible:ring-2 focus-visible:ring-kart-500 focus-visible:ring-offset-2 lg:bottom-4"
           >
-            <Locate className="h-5 w-5" />
+            <Locate className="h-5 w-5" aria-hidden="true" />
           </button>
         )}
       </div>

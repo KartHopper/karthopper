@@ -98,7 +98,7 @@ export function MapView({
   if (!apiKey) {
     return (
       <div className="flex h-full w-full flex-col items-center justify-center gap-3 bg-slate-50 p-6 text-center">
-        <AlertTriangle className="h-12 w-12 text-slate-400" />
+        <AlertTriangle className="h-12 w-12 text-slate-400" aria-hidden="true" />
         <p className="max-w-xs text-sm text-slate-500">{t("map.missingKey")}</p>
       </div>
     );

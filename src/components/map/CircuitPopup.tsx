@@ -49,19 +49,19 @@ export function CircuitPopup({ circuit, upcoming, locale, onClose }: CircuitPopu
             aria-label={t("common.close")}
             className="rounded-lg p-0.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600 focus-visible:ring-2 focus-visible:ring-kart-500 focus-visible:ring-offset-2"
           >
-            <X className="h-4 w-4" />
+            <X className="h-4 w-4" aria-hidden="true" />
           </button>
         </div>
 
         <div className="flex items-center gap-1.5 text-sm text-slate-500">
-          <MapPin className="h-3.5 w-3.5" />
+          <MapPin className="h-3.5 w-3.5" aria-hidden="true" />
           <span>
             {circuit.city}, {circuit.country}
           </span>
         </div>
 
         <div className="flex items-center gap-1.5 text-sm text-slate-700">
-          <Flag className="h-3.5 w-3.5" />
+          <Flag className="h-3.5 w-3.5" aria-hidden="true" />
           <span>{t("map.upcomingCount", { count: upcoming.length })}</span>
         </div>
 

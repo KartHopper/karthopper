@@ -21,7 +21,7 @@ export function Header() {
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-kart-500">
-            <MapPin className="h-4 w-4 text-white" />
+            <MapPin className="h-4 w-4 text-white" aria-hidden="true" />
           </div>
           <span className="font-heading text-lg font-bold text-slate-900">
             {t("common.appName")}
@@ -31,14 +31,14 @@ export function Header() {
         <nav className="flex items-center gap-4">
           <Link
             href="/map"
-            className="text-sm font-medium text-slate-600 transition-colors hover:text-slate-900 focus-visible:ring-2 focus-visible:ring-kart-500 focus-visible:ring-offset-2 rounded-lg px-2 py-1"
+            className="text-sm font-medium text-slate-600 transition-colors motion-reduce:transition-none hover:text-slate-900 focus-visible:ring-2 focus-visible:ring-kart-500 focus-visible:ring-offset-2 rounded-lg px-2 py-1"
           >
             {t("nav.map")}
           </Link>
 
           <button
             onClick={switchLocale}
-            className="rounded-lg border border-slate-200 px-2.5 py-1 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50 focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2"
+            className="rounded-lg border border-slate-200 px-2.5 py-1 text-sm font-medium text-slate-600 transition-colors motion-reduce:transition-none hover:bg-slate-50 focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2"
           >
             {locale === "fr" ? "EN" : "FR"}
           </button>
