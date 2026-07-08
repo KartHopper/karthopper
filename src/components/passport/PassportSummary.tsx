@@ -29,9 +29,15 @@ export function PassportSummary({ circuits }: PassportSummaryProps) {
   const countryCount = new Set(visitedCircuits.map((circuit) => circuit.country_iso)).size;
 
   return (
-    <p className="flex items-center gap-1.5 text-sm font-medium tabular-nums text-slate-700">
-      <Stamp className="h-4 w-4 text-kart-700" aria-hidden="true" />
-      {t("passport.summary", { circuits: visitedCircuits.length, countries: countryCount })}
+    <p className="flex items-center gap-1.5 text-sm font-medium text-slate-700">
+      <Stamp className="h-4 w-4 shrink-0 text-kart-700" aria-hidden="true" />
+      {visitedCircuits.length === 0 ? (
+        t("passport.emptyHint")
+      ) : (
+        <span className="tabular-nums">
+          {t("passport.summary", { circuits: visitedCircuits.length, countries: countryCount })}
+        </span>
+      )}
     </p>
   );
 }

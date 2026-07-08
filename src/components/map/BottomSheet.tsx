@@ -13,7 +13,7 @@ interface BottomSheetProps {
 }
 
 const HEIGHT_BY_STATE: Record<SheetState, string> = {
-  peek: "25dvh",
+  peek: "190px",
   half: "50dvh",
   full: "90dvh",
 };

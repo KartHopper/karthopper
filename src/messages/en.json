@@ -59,7 +59,8 @@
     "dateTo": "To",
     "showMore": "Show {count} more",
     "share": "Share these filters",
-    "linkCopied": "Link copied!"
+    "linkCopied": "Link copied!",
+    "noActiveFilters": "No active filters"
   },
   "categories": {
     "sprint": "Sprint",
@@ -87,7 +88,8 @@
     "sheetToggle": "Expand or collapse the panel",
     "sheetUp": "Expand panel",
     "sheetDown": "Collapse panel",
-    "recenter": "Recenter"
+    "recenter": "Recenter",
+    "viewList": "See the {count} races"
   },
   "circuit": {
     "metaDescription": "{name} karting track in {city}, {country}. Upcoming Sodi World Series races, info and access.",
@@ -109,7 +111,8 @@
     "export": "Export",
     "import": "Import",
     "importOk": "{count} visits imported",
-    "importError": "Invalid file"
+    "importError": "Invalid file",
+    "emptyHint": "Check off tracks you've raced to fill your passport"
   },
   "footer": {
     "legalNotice": "Legal notice",

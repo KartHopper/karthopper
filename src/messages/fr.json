@@ -59,7 +59,8 @@
     "dateTo": "Au",
     "showMore": "Afficher {count} de plus",
     "share": "Partager ces filtres",
-    "linkCopied": "Lien copié !"
+    "linkCopied": "Lien copié !",
+    "noActiveFilters": "Aucun filtre actif"
   },
   "categories": {
     "sprint": "Sprint",
@@ -87,7 +88,8 @@
     "sheetToggle": "Agrandir ou réduire le panneau",
     "sheetUp": "Agrandir le panneau",
     "sheetDown": "Réduire le panneau",
-    "recenter": "Recentrer"
+    "recenter": "Recentrer",
+    "viewList": "Voir les {count} courses"
   },
   "circuit": {
     "metaDescription": "Circuit de karting {name} à {city}, {country}. Prochaines courses Sodi World Series, infos et accès.",
@@ -109,7 +111,8 @@
     "export": "Exporter",
     "import": "Importer",
     "importOk": "{count} visites importées",
-    "importError": "Fichier invalide"
+    "importError": "Fichier invalide",
+    "emptyHint": "Coche les circuits où tu as roulé pour remplir ton passeport"
   },
   "footer": {
     "legalNotice": "Mentions légales",

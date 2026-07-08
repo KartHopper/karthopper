@@ -101,6 +101,20 @@ export function MapScreen() {
     selectedCircuitId !== null ? circuitsById.get(selectedCircuitId) : undefined;
   const visitedIds = new Set(mounted ? Object.keys(visits).map(Number) : []);
 
+  const shortDateFormatter = new Intl.DateTimeFormat(locale, { day: "numeric", month: "short" });
+  const activeFilterSegments: string[] = [];
+  if (origin) activeFilterSegments.push(origin.label);
+  if (radiusKm < 2000) activeFilterSegments.push(`< ${radiusKm} km`);
+  if (dateFrom !== null || dateTo !== null) {
+    const from = shortDateFormatter.format(new Date(dateFrom ?? referenceDate));
+    activeFilterSegments.push(dateTo ? `${from} → ${shortDateFormatter.format(new Date(dateTo))}` : `${from} →`);
+  }
+  if (categories.length > 0) {
+    activeFilterSegments.push(categories.map((category) => t(`categories.${category}`)).join(", "));
+  }
+  const activeFiltersSummary =
+    activeFilterSegments.length > 0 ? activeFilterSegments.join(" · ") : t("filters.noActiveFilters");
+
   function handleSelectFromList(circuitId: number) {
     setSelectedCircuitId(circuitId);
     const circuit = circuitsById.get(circuitId);
@@ -225,7 +239,14 @@ export function MapScreen() {
             <p className="text-sm font-medium tabular-nums text-slate-700">
               {t("filters.results", { count: filtered.length })}
             </p>
-            {origin && <p className="text-sm text-slate-500">{origin.label}</p>}
+            <p className="text-xs text-slate-500">{activeFiltersSummary}</p>
+            <button
+              type="button"
+              onClick={() => setSheetState("half")}
+              className="mt-2 rounded-lg bg-kart-500 py-2 text-sm font-medium text-white transition-colors motion-reduce:transition-none hover:bg-kart-400 focus-visible:ring-2 focus-visible:ring-kart-500 focus-visible:ring-offset-2"
+            >
+              {t("map.viewList", { count: filtered.length })}
+            </button>
           </div>
         }
       >
