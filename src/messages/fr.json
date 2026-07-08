@@ -22,8 +22,22 @@
     "heroTitle": "Trouve ta prochaine course de karting en 30 secondes",
     "heroSubtitle": "Carte interactive des courses Sodi World Series. Filtre par distance, prix, catégorie.",
     "cta": "Explorer la carte",
+    "ctaSecondary": "Voir les circuits",
     "racesCount": "{count} courses à venir",
-    "circuitsCount": "{count} circuits dans {countries} pays"
+    "circuitsCount": "{count} circuits dans {countries} pays",
+    "mapPreviewAlt": "Aperçu de la carte des circuits KartHopper",
+    "mapPreviewBadge": "{count} courses à venir",
+    "howTitle": "Comment ça marche",
+    "step1Title": "Active ta position",
+    "step1Text": "Géolocalisation ou nom de ville : les courses sont triées par distance.",
+    "step2Title": "Choisis tes filtres",
+    "step2Text": "Distance, dates, catégorie — et partage l'URL à tes coéquipiers.",
+    "step3Title": "Clique sur un circuit",
+    "step3Text": "Fiche complète, courses à venir, inscription directe sur SWS.",
+    "passportTitle": "Ton passeport karthopping",
+    "passportText": "Coche les circuits où tu as roulé et collectionne les pays. Tes données restent sur ton appareil, exportables en un clic.",
+    "passportCta": "Commencer ma collection",
+    "finalCtaTitle": "Prêt à trouver ta prochaine course ?"
   },
   "filters": {
     "distance": "Distance",
