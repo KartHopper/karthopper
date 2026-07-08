@@ -13,6 +13,7 @@ import {
 } from "react-map-gl/maplibre";
 import type { StyleSpecification } from "maplibre-gl";
 import type { Circuit } from "@/types/circuit";
+import type { RaceCategory } from "@/types/race";
 import { useFiltersStore } from "@/store/filters";
 import { loadKartHopperMapStyle } from "@/lib/map-style";
 import "maplibre-gl/dist/maplibre-gl.css";
@@ -20,6 +21,7 @@ import "maplibre-gl/dist/maplibre-gl.css";
 interface MapViewProps {
   circuits: Circuit[];
   upcomingCountByCircuit: Map<number, number>;
+  dominantCategoryByCircuit: Map<number, RaceCategory>;
   visitedIds?: ReadonlySet<number>;
   passportMode?: boolean;
   onSelectCircuit(id: number | null): void;
@@ -33,16 +35,20 @@ const DEFAULT_CENTER = { lng: 4.85, lat: 46.6 };
 const DEFAULT_ZOOM = 5;
 const ORIGIN_ZOOM = 7;
 
+type CircuitCategory = RaceCategory | "none";
+
 interface CircuitFeatureProperties {
   id: number;
   name: string;
   upcoming: number;
   visited: boolean;
+  category: CircuitCategory;
 }
 
 function buildCircuitsGeoJson(
   circuits: Circuit[],
   upcomingCountByCircuit: Map<number, number>,
+  dominantCategoryByCircuit: Map<number, RaceCategory>,
   visitedIds: ReadonlySet<number> | undefined
 ): GeoJSON.FeatureCollection<GeoJSON.Point, CircuitFeatureProperties> {
   return {
@@ -55,6 +61,7 @@ function buildCircuitsGeoJson(
         name: circuit.name,
         upcoming: upcomingCountByCircuit.get(circuit.id) ?? 0,
         visited: visitedIds?.has(circuit.id) ?? false,
+        category: dominantCategoryByCircuit.get(circuit.id) ?? "none",
       },
     })),
   };
@@ -63,6 +70,7 @@ function buildCircuitsGeoJson(
 export function MapView({
   circuits,
   upcomingCountByCircuit,
+  dominantCategoryByCircuit,
   visitedIds,
   passportMode = false,
   onSelectCircuit,
@@ -110,8 +118,9 @@ export function MapView({
   );
 
   const geojson = useMemo(
-    () => buildCircuitsGeoJson(circuits, upcomingCountByCircuit, visitedIds),
-    [circuits, upcomingCountByCircuit, visitedIds]
+    () =>
+      buildCircuitsGeoJson(circuits, upcomingCountByCircuit, dominantCategoryByCircuit, visitedIds),
+    [circuits, upcomingCountByCircuit, dominantCategoryByCircuit, visitedIds]
   );
 
   if (!apiKey) {
@@ -224,7 +233,19 @@ export function MapView({
           paint={{
             "circle-color": passportMode
               ? ["case", ["get", "visited"], "#FF5A1F", "#CBD5E1"]
-              : ["case", [">", ["get", "upcoming"], 0], "#FF5A1F", "#94A3B8"],
+              : [
+                  "match",
+                  ["get", "category"],
+                  "sprint",
+                  "#FF5A1F",
+                  "endurance",
+                  "#2563EB",
+                  "junior",
+                  "#16A34A",
+                  "other",
+                  "#8B5CF6",
+                  "#94A3B8",
+                ],
             "circle-radius": ["case", ["==", ["get", "id"], selectedFilterId], 20, 16],
             "circle-stroke-width": ["case", ["==", ["get", "id"], selectedFilterId], 4, 2],
             "circle-stroke-color": "#FFFFFF",

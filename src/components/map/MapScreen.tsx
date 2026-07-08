@@ -5,7 +5,13 @@ import { useLocale, useTranslations } from "next-intl";
 import { AlertTriangle, Locate, SearchX } from "lucide-react";
 import { useKarthopperData } from "@/hooks/use-karthopper-data";
 import { getReferenceDate } from "@/lib/reference-date";
-import { applyFilters, circuitById, racesByCircuitId, upcomingRaces } from "@/lib/races";
+import {
+  applyFilters,
+  circuitById,
+  dominantCategoryByCircuit,
+  racesByCircuitId,
+  upcomingRaces,
+} from "@/lib/races";
 import { useFiltersStore } from "@/store/filters";
 import { MapView } from "@/components/map/MapView";
 import { CircuitPopup } from "@/components/map/CircuitPopup";
@@ -83,6 +89,7 @@ export function MapScreen() {
   const upcomingCountByCircuit = new Map(
     Array.from(racesByCircuit.entries()).map(([id, list]) => [id, list.length])
   );
+  const dominantCategories = dominantCategoryByCircuit(racesByCircuit);
   const filtered = applyFilters(upcoming, circuitsById, {
     origin,
     radiusKm,
@@ -162,6 +169,7 @@ export function MapScreen() {
         <MapView
           circuits={circuits}
           upcomingCountByCircuit={upcomingCountByCircuit}
+          dominantCategoryByCircuit={dominantCategories}
           visitedIds={visitedIds}
           passportMode={passportMode}
           selectedCircuitId={selectedCircuitId}

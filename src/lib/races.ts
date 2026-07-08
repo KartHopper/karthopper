@@ -33,6 +33,38 @@ export function circuitById(circuits: Circuit[]): Map<number, Circuit> {
   return new Map(circuits.map((circuit) => [circuit.id, circuit]));
 }
 
+const CATEGORY_PRIORITY: RaceCategory[] = ["sprint", "endurance", "junior", "other"];
+
+/** Catégorie majoritaire des courses à venir d'un circuit ; égalité → ordre CATEGORY_PRIORITY. */
+export function dominantCategoryByCircuit(
+  racesByCircuit: Map<number, Race[]>
+): Map<number, RaceCategory> {
+  const result = new Map<number, RaceCategory>();
+
+  for (const [circuitId, races] of racesByCircuit) {
+    const counts = new Map<RaceCategory, number>();
+    for (const race of races) {
+      counts.set(race.category, (counts.get(race.category) ?? 0) + 1);
+    }
+
+    let bestCategory: RaceCategory | null = null;
+    let bestCount = 0;
+    for (const category of CATEGORY_PRIORITY) {
+      const count = counts.get(category) ?? 0;
+      if (count > bestCount) {
+        bestCount = count;
+        bestCategory = category;
+      }
+    }
+
+    if (bestCategory) {
+      result.set(circuitId, bestCategory);
+    }
+  }
+
+  return result;
+}
+
 export function distanceToCircuit(
   origin: LatLng | null,
   circuit: Circuit | undefined
