@@ -1,9 +1,12 @@
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { MapPin } from "lucide-react";
+import { loadCircuits } from "@/lib/data";
 
 export default function HomePage() {
   const t = useTranslations();
+  const circuits = loadCircuits();
+  const countries = new Set(circuits.map((circuit) => circuit.country_iso)).size;
 
   return (
     <div className="flex flex-col items-center justify-center px-4 py-24 text-center">
@@ -26,6 +29,10 @@ export default function HomePage() {
         <MapPin className="h-5 w-5" />
         {t("home.cta")}
       </Link>
+
+      <p className="mt-6 text-sm text-slate-400">
+        {t("home.circuitsCount", { count: circuits.length, countries })}
+      </p>
     </div>
   );
 }

@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import { Space_Grotesk, Inter } from "next/font/google";
 import "./globals.css";
 
@@ -14,12 +13,6 @@ const inter = Inter({
   subsets: ["latin"],
   display: "swap",
 });
-
-export const metadata: Metadata = {
-  title: "KartHopper — Trouve ta prochaine course de karting",
-  description:
-    "Carte interactive des courses de karting Sodi World Series. Filtre par distance, prix, catégorie. Estime ton budget déplacement.",
-};
 
 export default function RootLayout({
   children,

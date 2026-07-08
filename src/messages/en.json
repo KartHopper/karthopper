@@ -1,4 +1,8 @@
 {
+  "meta": {
+    "title": "KartHopper — Find your next karting race",
+    "description": "Interactive map of Sodi World Series karting races. Filter by distance, price, category. Estimate your travel budget."
+  },
   "common": {
     "appName": "KartHopper",
     "tagline": "Find your next karting race",
@@ -18,7 +22,8 @@
     "heroTitle": "Find your next karting race in 30 seconds",
     "heroSubtitle": "Interactive map of Sodi World Series races. Filter by distance, price, category.",
     "cta": "Explore the map",
-    "racesCount": "{count} upcoming races"
+    "racesCount": "{count} upcoming races",
+    "circuitsCount": "{count} tracks in {countries} countries"
   },
   "filters": {
     "distance": "Distance",
