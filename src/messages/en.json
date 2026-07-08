@@ -86,7 +86,11 @@
     "markVisited": "I've raced here",
     "visited": "Visited",
     "summary": "{circuits} tracks · {countries} countries",
-    "mapMode": "Passport"
+    "mapMode": "Passport",
+    "export": "Export",
+    "import": "Import",
+    "importOk": "{count} visits imported",
+    "importError": "Invalid file"
   },
   "footer": {
     "legalNotice": "Legal notice",

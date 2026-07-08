@@ -86,7 +86,11 @@
     "markVisited": "J'y ai roulé",
     "visited": "Visité",
     "summary": "{circuits} circuits · {countries} pays",
-    "mapMode": "Passeport"
+    "mapMode": "Passeport",
+    "export": "Exporter",
+    "import": "Importer",
+    "importOk": "{count} visites importées",
+    "importError": "Fichier invalide"
   },
   "footer": {
     "legalNotice": "Mentions légales",
