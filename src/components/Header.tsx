@@ -3,7 +3,7 @@
 import { useTranslations } from "next-intl";
 import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
-import { MapPin } from "lucide-react";
+import { Logo } from "@/components/Logo";
 
 export function Header() {
   const t = useTranslations();
@@ -20,11 +20,11 @@ export function Header() {
     <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur">
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-kart-500">
-            <MapPin className="h-4 w-4 text-white" aria-hidden="true" />
-          </div>
+          <Logo className="h-8 w-8" />
+          {/* "KartHopper" est un nom propre identique en FR/EN (cf. common.appName) ;
+              rendu stylé en dur pour le "H" surélevé du wordmark (DA §10). */}
           <span className="font-heading text-lg font-bold text-slate-900">
-            {t("common.appName")}
+            Kart<span className="relative -top-[2px] inline-block">H</span>opper
           </span>
         </Link>
 
