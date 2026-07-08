@@ -1,8 +1,7 @@
+# Cron désactivé le 2026-07-07 : SWS bloque le scraping par reCAPTCHA (voir PIPELINE.md).
 name: Scrape SWS Races
 
 on:
-  schedule:
-    - cron: "0 5 * * *" # Daily 5:00 UTC
   workflow_dispatch: # Manual trigger
 
 jobs:
