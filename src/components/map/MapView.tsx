@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { AlertTriangle } from "lucide-react";
 import {
@@ -11,8 +11,10 @@ import {
   type MapRef,
   type MapLayerMouseEvent,
 } from "react-map-gl/maplibre";
+import type { StyleSpecification } from "maplibre-gl";
 import type { Circuit } from "@/types/circuit";
 import { useFiltersStore } from "@/store/filters";
+import { loadKartHopperMapStyle } from "@/lib/map-style";
 import "maplibre-gl/dist/maplibre-gl.css";
 
 interface MapViewProps {
@@ -72,6 +74,8 @@ export function MapView({
   const mapRef = useRef<MapRef>(null);
   const origin = useFiltersStore((state) => state.origin);
   const apiKey = process.env.NEXT_PUBLIC_MAPTILER_API_KEY;
+  const [mapStyle, setMapStyle] = useState<StyleSpecification | null>(null);
+  const [styleError, setStyleError] = useState(false);
 
   useEffect(() => {
     if (!flyTo) return;
@@ -80,6 +84,21 @@ export function MapView({
       map.easeTo({ center: [flyTo.lng, flyTo.lat], zoom: flyTo.zoom });
     }
   }, [flyTo]);
+
+  useEffect(() => {
+    if (!apiKey) return;
+    let cancelled = false;
+    loadKartHopperMapStyle(apiKey)
+      .then((style) => {
+        if (!cancelled) setMapStyle(style);
+      })
+      .catch(() => {
+        if (!cancelled) setStyleError(true);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [apiKey]);
 
   const initialViewState = useMemo(
     () =>
@@ -103,6 +122,13 @@ export function MapView({
       </div>
     );
   }
+
+  if (!mapStyle && !styleError) {
+    return <div className="h-full w-full animate-pulse bg-slate-100" />;
+  }
+
+  const resolvedMapStyle: StyleSpecification | string =
+    mapStyle ?? `https://api.maptiler.com/maps/positron/style.json?key=${apiKey}`;
 
   function handleClick(event: MapLayerMouseEvent) {
     const feature = event.features?.[0];
@@ -132,7 +158,7 @@ export function MapView({
     <Map
       ref={mapRef}
       initialViewState={initialViewState}
-      mapStyle={`https://api.maptiler.com/maps/positron/style.json?key=${apiKey}`}
+      mapStyle={resolvedMapStyle}
       interactiveLayerIds={["clusters", "circuit-point"]}
       cursor="pointer"
       onClick={handleClick}
@@ -146,6 +172,18 @@ export function MapView({
         clusterRadius={50}
         clusterMaxZoom={11}
       >
+        <Layer
+          id="clusters-shadow"
+          type="circle"
+          filter={["has", "point_count"]}
+          paint={{
+            "circle-color": "#0F172A",
+            "circle-opacity": 0.18,
+            "circle-blur": 0.6,
+            "circle-radius": ["step", ["get", "point_count"], 18, 10, 22, 50, 28],
+            "circle-translate": [0, 2],
+          }}
+        />
         <Layer
           id="clusters"
           type="circle"
@@ -168,6 +206,18 @@ export function MapView({
           paint={{ "text-color": "#FFFFFF" }}
         />
         <Layer
+          id="circuit-point-shadow"
+          type="circle"
+          filter={["!", ["has", "point_count"]]}
+          paint={{
+            "circle-color": "#0F172A",
+            "circle-opacity": 0.18,
+            "circle-blur": 0.6,
+            "circle-radius": ["case", ["==", ["get", "id"], selectedFilterId], 22, 18],
+            "circle-translate": [0, 2],
+          }}
+        />
+        <Layer
           id="circuit-point"
           type="circle"
           filter={["!", ["has", "point_count"]]}
@@ -175,7 +225,7 @@ export function MapView({
             "circle-color": passportMode
               ? ["case", ["get", "visited"], "#FF5A1F", "#CBD5E1"]
               : ["case", [">", ["get", "upcoming"], 0], "#FF5A1F", "#94A3B8"],
-            "circle-radius": ["case", ["==", ["get", "id"], selectedFilterId], 14, 12],
+            "circle-radius": ["case", ["==", ["get", "id"], selectedFilterId], 20, 16],
             "circle-stroke-width": ["case", ["==", ["get", "id"], selectedFilterId], 4, 2],
             "circle-stroke-color": "#FFFFFF",
           }}
@@ -190,7 +240,7 @@ export function MapView({
           }
           layout={{
             "text-field": ["get", "upcoming"],
-            "text-size": 11,
+            "text-size": 12,
           }}
           paint={{ "text-color": "#FFFFFF" }}
         />
