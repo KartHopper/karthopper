@@ -76,7 +76,8 @@
     "closesInDays": "Clôture dans {count} jours",
     "registerOnSws": "S'inscrire sur SWS",
     "budget": "Budget",
-    "addToCalendar": "Ajouter à mon agenda"
+    "addToCalendar": "Ajouter à mon agenda",
+    "manches": "{count} manches"
   },
   "map": {
     "metaTitle": "Carte des circuits et courses SWS — KartHopper",

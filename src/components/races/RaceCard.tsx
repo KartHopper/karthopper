@@ -14,6 +14,8 @@ interface RaceCardProps {
   distanceKm: number | null;
   locale: string;
   selected: boolean;
+  /** Nombre de manches de l'événement (>1 = course à plusieurs manches). */
+  mancheCount?: number;
   onSelect?: () => void;
 }
 
@@ -65,7 +67,15 @@ function getDeadlineBadge(
   return null;
 }
 
-export function RaceCard({ race, circuit, distanceKm, locale, selected, onSelect }: RaceCardProps) {
+export function RaceCard({
+  race,
+  circuit,
+  distanceKm,
+  locale,
+  selected,
+  mancheCount = 1,
+  onSelect,
+}: RaceCardProps) {
   const t = useTranslations();
   const deadlineBadge = getDeadlineBadge(race.deadline, getReferenceDate());
   const spotsInfo = getSpotsInfo(race);
@@ -102,6 +112,11 @@ export function RaceCard({ race, circuit, distanceKm, locale, selected, onSelect
         </Badge>
         {race.track_type && (
           <Badge variant={race.track_type}>{t(`circuit.${race.track_type}`)}</Badge>
+        )}
+        {mancheCount > 1 && (
+          <span className="shrink-0 rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600">
+            {t("race.manches", { count: mancheCount })}
+          </span>
         )}
         <h3 className="line-clamp-2 font-heading text-base font-medium text-slate-900">
           {race.title}

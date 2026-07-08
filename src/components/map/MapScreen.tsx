@@ -6,10 +6,11 @@ import { AlertTriangle, Locate, SearchX } from "lucide-react";
 import { useKarthopperData } from "@/hooks/use-karthopper-data";
 import { getReferenceDate } from "@/lib/reference-date";
 import {
-  applyFilters,
   circuitById,
   dominantCategoryByCircuit,
-  racesByCircuitId,
+  eventsByCircuitId,
+  filterEvents,
+  groupRacesIntoEvents,
   upcomingRaces,
 } from "@/lib/races";
 import { useFiltersStore } from "@/store/filters";
@@ -85,18 +86,27 @@ export function MapScreen() {
   const referenceDate = getReferenceDate();
   const upcoming = upcomingRaces(races, referenceDate);
   const circuitsById = circuitById(circuits);
-  const racesByCircuit = racesByCircuitId(upcoming);
-  const upcomingCountByCircuit = new Map(
-    Array.from(racesByCircuit.entries()).map(([id, list]) => [id, list.length])
-  );
-  const dominantCategories = dominantCategoryByCircuit(racesByCircuit);
-  const filtered = applyFilters(upcoming, circuitsById, {
+  // Une "course" = un événement regroupant toutes ses manches (cf. groupRacesIntoEvents).
+  const allEvents = groupRacesIntoEvents(upcoming);
+  const filteredEvents = filterEvents(allEvents, circuitsById, {
     origin,
     radiusKm,
     dateFrom: dateFrom ?? referenceDate,
     dateTo,
     categories,
   });
+  // La carte reflète les filtres actifs (compteurs + couleurs = événements filtrés).
+  const eventsByCircuit = eventsByCircuitId(filteredEvents);
+  const upcomingCountByCircuit = new Map(
+    Array.from(eventsByCircuit.entries()).map(([id, list]) => [id, list.length])
+  );
+  const dominantCategories = dominantCategoryByCircuit(eventsByCircuit);
+  // En mode normal, seuls les circuits ayant ≥1 événement filtré sont affichés
+  // (le clustering se resserre quand on filtre — fix « le filtre ne change rien à la carte »).
+  // En mode passeport, tous les circuits restent visibles (on coche même sans course à venir).
+  const visibleCircuits = passportMode
+    ? circuits
+    : circuits.filter((circuit) => eventsByCircuit.has(circuit.id));
   const selectedCircuit =
     selectedCircuitId !== null ? circuitsById.get(selectedCircuitId) : undefined;
   const visitedIds = new Set(mounted ? Object.keys(visits).map(Number) : []);
@@ -126,7 +136,7 @@ export function MapScreen() {
   }
 
   const listContent =
-    filtered.length === 0 ? (
+    filteredEvents.length === 0 ? (
       <EmptyState
         icon={SearchX}
         title={t("filters.noResults")}
@@ -139,7 +149,7 @@ export function MapScreen() {
           <p className="mb-3 text-sm text-slate-500">{t("emptyStates.noOriginHint")}</p>
         )}
         <RaceList
-          races={filtered}
+          events={filteredEvents}
           circuits={circuitsById}
           origin={origin}
           locale={locale}
@@ -175,7 +185,7 @@ export function MapScreen() {
         </div>
         <div className="flex-1 overflow-y-auto">
           <div className="sticky top-0 z-10 border-b border-slate-200 bg-slate-50 p-4">
-            <RaceFilters resultCount={filtered.length} />
+            <RaceFilters resultCount={filteredEvents.length} />
           </div>
           <div className="p-4">{listContent}</div>
         </div>
@@ -183,7 +193,7 @@ export function MapScreen() {
 
       <div className="relative flex-1">
         <MapView
-          circuits={circuits}
+          circuits={visibleCircuits}
           upcomingCountByCircuit={upcomingCountByCircuit}
           dominantCategoryByCircuit={dominantCategories}
           visitedIds={visitedIds}
@@ -195,7 +205,7 @@ export function MapScreen() {
           {selectedCircuit && (
             <CircuitPopup
               circuit={selectedCircuit}
-              upcoming={racesByCircuit.get(selectedCircuit.id) ?? []}
+              events={eventsByCircuit.get(selectedCircuit.id) ?? []}
               locale={locale}
               onClose={() => setSelectedCircuitId(null)}
             />
@@ -237,7 +247,7 @@ export function MapScreen() {
             </div>
             <PassportTransfer />
             <p className="text-sm font-medium tabular-nums text-slate-700">
-              {t("filters.results", { count: filtered.length })}
+              {t("filters.results", { count: filteredEvents.length })}
             </p>
             <p className="text-xs text-slate-500">{activeFiltersSummary}</p>
             <button
@@ -245,12 +255,12 @@ export function MapScreen() {
               onClick={() => setSheetState("half")}
               className="mt-2 rounded-lg bg-kart-500 py-2 text-sm font-medium text-white transition-colors motion-reduce:transition-none hover:bg-kart-400 focus-visible:ring-2 focus-visible:ring-kart-500 focus-visible:ring-offset-2"
             >
-              {t("map.viewList", { count: filtered.length })}
+              {t("map.viewList", { count: filteredEvents.length })}
             </button>
           </div>
         }
       >
-        <RaceFilters resultCount={filtered.length} />
+        <RaceFilters resultCount={filteredEvents.length} />
         <div className="mt-3">{listContent}</div>
       </BottomSheet>
     </div>

@@ -7,16 +7,16 @@ import { Badge } from "@/components/Badge";
 import { VisitToggle } from "@/components/passport/VisitToggle";
 import { useTranslations } from "next-intl";
 import type { Circuit } from "@/types/circuit";
-import type { Race } from "@/types/race";
+import type { RaceEvent } from "@/lib/races";
 
 interface CircuitPopupProps {
   circuit: Circuit;
-  upcoming: Race[]; // déjà filtrées/triées, ce composant en affiche max 3
+  events: RaceEvent[]; // déjà filtrés/triés, ce composant en affiche max 3
   locale: string;
   onClose(): void;
 }
 
-const MAX_RACES_SHOWN = 3;
+const MAX_EVENTS_SHOWN = 3;
 
 const CATEGORY_BADGE_VARIANT = {
   sprint: "sprint",
@@ -25,9 +25,9 @@ const CATEGORY_BADGE_VARIANT = {
   other: "special",
 } as const;
 
-export function CircuitPopup({ circuit, upcoming, locale, onClose }: CircuitPopupProps) {
+export function CircuitPopup({ circuit, events, locale, onClose }: CircuitPopupProps) {
   const t = useTranslations();
-  const races = upcoming.slice(0, MAX_RACES_SHOWN);
+  const shownEvents = events.slice(0, MAX_EVENTS_SHOWN);
 
   return (
     <Popup
@@ -36,53 +36,55 @@ export function CircuitPopup({ circuit, upcoming, locale, onClose }: CircuitPopu
       anchor="bottom"
       closeButton={false}
       offset={16}
+      maxWidth="none"
       onClose={onClose}
     >
-      <div className="flex w-64 flex-col gap-2 p-1">
+      <div className="flex w-64 max-w-[calc(100vw-2rem)] flex-col gap-2 p-1">
         <div className="flex items-start justify-between gap-2">
-          <h3 className="font-heading text-base font-semibold text-slate-900">
+          <h3 className="min-w-0 wrap-break-word font-heading text-base font-semibold text-slate-900">
             {circuit.name}
           </h3>
           <button
             type="button"
             onClick={onClose}
             aria-label={t("common.close")}
-            className="rounded-lg p-0.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600 focus-visible:ring-2 focus-visible:ring-kart-500 focus-visible:ring-offset-2"
+            className="shrink-0 rounded-lg p-0.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600 focus-visible:ring-2 focus-visible:ring-kart-500 focus-visible:ring-offset-2"
           >
             <X className="h-4 w-4" aria-hidden="true" />
           </button>
         </div>
 
         <div className="flex items-center gap-1.5 text-sm text-slate-500">
-          <MapPin className="h-3.5 w-3.5" aria-hidden="true" />
-          <span>
+          <MapPin className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+          <span className="min-w-0 truncate">
             {circuit.city}, {circuit.country}
           </span>
         </div>
 
         <div className="flex items-center gap-1.5 text-sm text-slate-700">
-          <Flag className="h-3.5 w-3.5" aria-hidden="true" />
-          <span>{t("map.upcomingCount", { count: upcoming.length })}</span>
+          <Flag className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+          <span>{t("map.upcomingCount", { count: events.length })}</span>
         </div>
 
-        {races.length > 0 ? (
+        {shownEvents.length > 0 ? (
           <ul className="flex flex-col gap-1.5 border-t border-slate-200 pt-2">
-            {races.map((race) => (
-              <li key={race.id} className="flex items-center gap-2 text-sm">
-                <Badge variant={CATEGORY_BADGE_VARIANT[race.category]}>
-                  {t(`categories.${race.category}`)}
+            {shownEvents.map((event) => (
+              <li key={event.key} className="flex items-center gap-2 text-sm">
+                <Badge variant={CATEGORY_BADGE_VARIANT[event.category]}>
+                  {t(`categories.${event.category}`)}
                 </Badge>
-                <span className="text-slate-600">
+                <span className="min-w-0 truncate text-slate-600">
                   {new Intl.DateTimeFormat(locale, { day: "numeric", month: "short" }).format(
-                    new Date(race.date)
+                    new Date(event.date)
                   )}
+                  {event.mancheCount > 1 && ` · ${t("race.manches", { count: event.mancheCount })}`}
                 </span>
-                {race.price !== null && (
-                  <span className="ml-auto tabular-nums text-slate-900">
+                {event.representative.price !== null && (
+                  <span className="ml-auto shrink-0 tabular-nums text-slate-900">
                     {new Intl.NumberFormat(locale, {
                       style: "currency",
-                      currency: race.currency,
-                    }).format(race.price)}
+                      currency: event.representative.currency,
+                    }).format(event.representative.price)}
                   </span>
                 )}
               </li>

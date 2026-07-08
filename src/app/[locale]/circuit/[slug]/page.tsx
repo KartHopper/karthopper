@@ -10,7 +10,7 @@ import { VisitToggle } from "@/components/passport/VisitToggle";
 import { RaceCard } from "@/components/races/RaceCard";
 import { findCircuitBySlug, loadCircuits, loadRaces } from "@/lib/data";
 import { getReferenceDate } from "@/lib/reference-date";
-import { upcomingRaces } from "@/lib/races";
+import { groupRacesIntoEvents, upcomingRaces } from "@/lib/races";
 
 export const dynamicParams = false;
 
@@ -60,6 +60,7 @@ export default async function CircuitPage({
   const upcoming = upcomingRaces(races, referenceDate).filter(
     (race) => race.circuit_id === circuit.id
   );
+  const events = groupRacesIntoEvents(upcoming);
   const trackType = upcoming.find((race) => race.track_type !== null)?.track_type ?? null;
 
   const jsonLd = {
@@ -166,7 +167,7 @@ export default async function CircuitPage({
           {t("circuit.upcomingTitle")}
         </h2>
         <div className="mt-3">
-          {upcoming.length === 0 ? (
+          {events.length === 0 ? (
             <EmptyState
               icon={SearchX}
               title={t("circuit.noUpcoming")}
@@ -174,13 +175,14 @@ export default async function CircuitPage({
             />
           ) : (
             <ul className="flex flex-col gap-3">
-              {upcoming.map((race) => (
-                <li key={race.id}>
+              {events.map((event) => (
+                <li key={event.key}>
                   <RaceCard
-                    race={race}
+                    race={event.representative}
                     circuit={circuit}
                     distanceKm={null}
                     locale={locale}
+                    mancheCount={event.mancheCount}
                     selected={false}
                   />
                 </li>

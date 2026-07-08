@@ -3,13 +3,12 @@
 import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { RaceCard } from "@/components/races/RaceCard";
-import { distanceToCircuit } from "@/lib/races";
-import type { Race } from "@/types/race";
+import { distanceToCircuit, type RaceEvent } from "@/lib/races";
 import type { Circuit } from "@/types/circuit";
 import type { LatLng } from "@/lib/geo";
 
 interface RaceListProps {
-  races: Race[]; // déjà filtrées + triées
+  events: RaceEvent[]; // déjà filtrés + triés
   circuits: Map<number, Circuit>;
   origin: LatLng | null;
   locale: string;
@@ -25,7 +24,7 @@ function prefersReducedMotion(): boolean {
 }
 
 export function RaceList({
-  races,
+  events,
   circuits,
   origin,
   locale,
@@ -36,14 +35,14 @@ export function RaceList({
   const [limit, setLimit] = useState(PAGE_SIZE);
   const itemRefs = useRef<Record<string, HTMLLIElement | null>>({});
 
-  const visibleRaces = races.slice(0, limit);
+  const visibleEvents = events.slice(0, limit);
 
   useEffect(() => {
     if (selectedCircuitId === null) return;
-    const match = visibleRaces.find((race) => race.circuit_id === selectedCircuitId);
+    const match = visibleEvents.find((event) => event.circuit_id === selectedCircuitId);
     if (!match) return;
 
-    itemRefs.current[match.id]?.scrollIntoView({
+    itemRefs.current[match.key]?.scrollIntoView({
       block: "nearest",
       behavior: prefersReducedMotion() ? "auto" : "smooth",
     });
@@ -52,30 +51,31 @@ export function RaceList({
 
   return (
     <ul className="flex flex-col gap-3">
-      {visibleRaces.map((race) => {
-        const circuit = circuits.get(race.circuit_id);
+      {visibleEvents.map((event) => {
+        const circuit = circuits.get(event.circuit_id);
         return (
-          <li key={race.id} ref={(el) => { itemRefs.current[race.id] = el; }}>
+          <li key={event.key} ref={(el) => { itemRefs.current[event.key] = el; }}>
             <RaceCard
-              race={race}
+              race={event.representative}
               circuit={circuit}
               distanceKm={distanceToCircuit(origin, circuit)}
               locale={locale}
-              selected={selectedCircuitId === race.circuit_id}
-              onSelect={() => onSelectCircuit(race.circuit_id)}
+              mancheCount={event.mancheCount}
+              selected={selectedCircuitId === event.circuit_id}
+              onSelect={() => onSelectCircuit(event.circuit_id)}
             />
           </li>
         );
       })}
 
-      {limit < races.length && (
+      {limit < events.length && (
         <li>
           <button
             type="button"
             onClick={() => setLimit((value) => value + PAGE_SIZE)}
             className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2"
           >
-            {t("filters.showMore", { count: Math.min(PAGE_SIZE, races.length - limit) })}
+            {t("filters.showMore", { count: Math.min(PAGE_SIZE, events.length - limit) })}
           </button>
         </li>
       )}

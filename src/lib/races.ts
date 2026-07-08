@@ -10,20 +10,73 @@ export interface RaceFilters {
   categories: RaceCategory[]; // [] = toutes
 }
 
+/**
+ * Un événement de karting = toutes les manches d'une même course, qu'un pilote
+ * s'inscrit ensemble. Regroupe les courses par circuit + date + catégorie + prix
+ * + modèle de kart (cf. décision produit 2026-07-08 : ne fusionner que les
+ * manches vraiment identiques).
+ */
+export interface RaceEvent {
+  key: string;
+  circuit_id: number;
+  date: string;
+  category: RaceCategory;
+  /** Course représentative (la première de la liste triée) pour l'affichage. */
+  representative: Race;
+  races: Race[];
+  mancheCount: number;
+}
+
 export function upcomingRaces(races: Race[], referenceDate: string): Race[] {
   return races
     .filter((race) => race.date >= referenceDate)
     .sort((a, b) => a.date.localeCompare(b.date) || a.title.localeCompare(b.title));
 }
 
-export function racesByCircuitId(races: Race[]): Map<number, Race[]> {
-  const map = new Map<number, Race[]>();
+function eventKey(race: Race): string {
+  return [
+    race.circuit_id,
+    race.date,
+    race.category,
+    race.price ?? "np",
+    race.kart_model ?? "nk",
+  ].join("|");
+}
+
+/** Regroupe des courses (déjà triées) en événements. Conserve l'ordre d'apparition. */
+export function groupRacesIntoEvents(races: Race[]): RaceEvent[] {
+  const map = new Map<string, RaceEvent>();
+
   for (const race of races) {
-    const existing = map.get(race.circuit_id);
+    const key = eventKey(race);
+    const existing = map.get(key);
     if (existing) {
-      existing.push(race);
+      existing.races.push(race);
+      existing.mancheCount += 1;
     } else {
-      map.set(race.circuit_id, [race]);
+      map.set(key, {
+        key,
+        circuit_id: race.circuit_id,
+        date: race.date,
+        category: race.category,
+        representative: race,
+        races: [race],
+        mancheCount: 1,
+      });
+    }
+  }
+
+  return Array.from(map.values());
+}
+
+export function eventsByCircuitId(events: RaceEvent[]): Map<number, RaceEvent[]> {
+  const map = new Map<number, RaceEvent[]>();
+  for (const event of events) {
+    const existing = map.get(event.circuit_id);
+    if (existing) {
+      existing.push(event);
+    } else {
+      map.set(event.circuit_id, [event]);
     }
   }
   return map;
@@ -35,16 +88,16 @@ export function circuitById(circuits: Circuit[]): Map<number, Circuit> {
 
 const CATEGORY_PRIORITY: RaceCategory[] = ["sprint", "endurance", "junior", "other"];
 
-/** Catégorie majoritaire des courses à venir d'un circuit ; égalité → ordre CATEGORY_PRIORITY. */
+/** Catégorie majoritaire des événements à venir d'un circuit ; égalité → ordre CATEGORY_PRIORITY. */
 export function dominantCategoryByCircuit(
-  racesByCircuit: Map<number, Race[]>
+  eventsByCircuit: Map<number, RaceEvent[]>
 ): Map<number, RaceCategory> {
   const result = new Map<number, RaceCategory>();
 
-  for (const [circuitId, races] of racesByCircuit) {
+  for (const [circuitId, events] of eventsByCircuit) {
     const counts = new Map<RaceCategory, number>();
-    for (const race of races) {
-      counts.set(race.category, (counts.get(race.category) ?? 0) + 1);
+    for (const event of events) {
+      counts.set(event.category, (counts.get(event.category) ?? 0) + 1);
     }
 
     let bestCategory: RaceCategory | null = null;
@@ -73,24 +126,24 @@ export function distanceToCircuit(
   return haversineKm(origin, { lat: circuit.lat, lng: circuit.lng });
 }
 
-export function applyFilters(
-  races: Race[],
+export function filterEvents(
+  events: RaceEvent[],
   circuits: Map<number, Circuit>,
   filters: RaceFilters
-): Race[] {
+): RaceEvent[] {
   const { origin, radiusKm, dateFrom, dateTo, categories } = filters;
   const distanceFilterActive = origin !== null && radiusKm < 2000;
 
-  return races.filter((race) => {
-    if (race.date < dateFrom) return false;
-    if (dateTo !== null && race.date > dateTo) return false;
+  return events.filter((event) => {
+    if (event.date < dateFrom) return false;
+    if (dateTo !== null && event.date > dateTo) return false;
 
-    if (categories.length > 0 && !categories.includes(race.category)) {
+    if (categories.length > 0 && !categories.includes(event.category)) {
       return false;
     }
 
     if (distanceFilterActive) {
-      const circuit = circuits.get(race.circuit_id);
+      const circuit = circuits.get(event.circuit_id);
       const distance = distanceToCircuit(origin, circuit);
       if (distance === null || distance > radiusKm) return false;
     }

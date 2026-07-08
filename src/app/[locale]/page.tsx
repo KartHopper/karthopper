@@ -4,7 +4,7 @@ import { Flag, LocateFixed, MapPin, SlidersHorizontal, Stamp } from "lucide-reac
 import { Logo } from "@/components/Logo";
 import { MapPreviewCard } from "@/components/MapPreviewCard";
 import { loadCircuits, loadRaces } from "@/lib/data";
-import { upcomingRaces } from "@/lib/races";
+import { groupRacesIntoEvents, upcomingRaces } from "@/lib/races";
 import { getReferenceDate } from "@/lib/reference-date";
 
 const DECORATIVE_MARKERS = [
@@ -18,7 +18,7 @@ export default function HomePage() {
   const t = useTranslations();
   const circuits = loadCircuits();
   const countries = new Set(circuits.map((circuit) => circuit.country_iso)).size;
-  const raceCount = upcomingRaces(loadRaces(), getReferenceDate()).length;
+  const raceCount = groupRacesIntoEvents(upcomingRaces(loadRaces(), getReferenceDate())).length;
   const apiKey = process.env.NEXT_PUBLIC_MAPTILER_API_KEY;
   const mapPreviewUrl = apiKey
     ? `https://api.maptiler.com/maps/positron/static/4.85,46.6,4.6/720x480@2x.png?key=${apiKey}`
