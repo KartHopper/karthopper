@@ -159,10 +159,12 @@ export function MapScreen() {
           </div>
           <PassportTransfer />
         </div>
-        <div className="border-b border-slate-200 bg-slate-50 p-4">
-          <RaceFilters resultCount={filtered.length} />
+        <div className="flex-1 overflow-y-auto">
+          <div className="sticky top-0 z-10 border-b border-slate-200 bg-slate-50 p-4">
+            <RaceFilters resultCount={filtered.length} />
+          </div>
+          <div className="p-4">{listContent}</div>
         </div>
-        <div className="flex-1 overflow-y-auto p-4">{listContent}</div>
       </aside>
 
       <div className="relative flex-1">
